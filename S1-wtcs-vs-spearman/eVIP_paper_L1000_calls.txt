@@ -1,0 +1,201 @@
+Gene Symbol	Allele	eVIP_prediction	Hit in EGFR screen 3 uM (Z>2)	Hit in EGFR screen 0.3 uM (Z>2)	TumorPlex hit? (FDR< 0.25 and log2(FC) > 3)	SIFT	PolyPhen2 HumDiv	Mutation Assessor	Benchmark activity											
+ABCB9	ABCB9_p.R281L	Neutral	NO	NO	NO	Neutral	Neutral	COF												
+AKR1B1	AKR1B1_p.F252L	Neutral	NO	NO	NO	COF	COF	Neutral												
+AKT1	AKT1_p.D323Y	n.d.	YES	YES	NO	COF	COF	Neutral												
+ARAF	ARAF_p.D429A	GOF	NO	NO	NO	COF	COF	COF	LOF											
+ARAF	ARAF_p.S214C	COF	YES	YES	YES	COF	COF	COF	GOF											
+ARAF	ARAF_p.S214C.p.D429A	n.d.	NO	NO	NO	n.d.	n.d.	n.d.												
+ARAF	ARAF_p.S214F	COF	YES	YES	YES	COF	COF	COF	GOF											
+ARAF	ARAF_p.S214F.p.D429A	n.d.	NO	NO	NO	n.d.	n.d.	n.d.												
+ARAF	ARAF_p.V145L	Neutral	NO	NO	NO	Neutral	Neutral	Neutral												
+ATF2	ATF2_p.A481V	n.d.	NO	NO	NO	COF	COF	Neutral												
+ATF2	ATF2_p.T339A	COF	NO	NO	NO	COF	COF	COF												
+BRAF	BRAF_p.A762E	n.d.	YES	YES	NO	Neutral	Neutral	Neutral												
+BRAF	BRAF_p.D594H	n.d.	YES	YES	NO	COF	COF	COF												
+BRAF	BRAF_p.G466A	n.d.	YES	YES	NO	COF	COF	COF	GOF											
+BRAF	BRAF_p.G466E	n.d.	YES	YES	NO	COF	COF	COF	GOF											
+BRAF	BRAF_p.G466V	n.d.	YES	YES	NO	COF	COF	COF	GOF											
+BRAF	BRAF_p.G469S	n.d.	YES	YES	NO	COF	COF	COF												
+BRAF	BRAF_p.G469V	n.d.	YES	YES	NO	COF	COF	COF												
+BRAF	BRAF_p.H574N	n.d.	NO	NO	NO	COF	COF	COF												
+BRAF	BRAF_p.H574Q	n.d.	YES	YES	YES	COF	COF	COF												
+BRAF	BRAF_p.K601N	n.d.	YES	YES	NO	COF	COF	Neutral												
+BRAF	BRAF_p.L485S	n.d.	YES	YES	YES	COF	COF	COF												
+BRAF	BRAF_p.L613F	n.d.	YES	YES	YES	COF	Neutral	Neutral												
+BRAF	BRAF_p.N581S	n.d.	YES	YES	NO	Neutral	COF	COF	GOF											
+BRAF	BRAF_p.P367R	n.d.	YES	YES	YES	COF	COF	COF												
+BRAF	BRAF_p.R682W	n.d.	YES	YES	YES	COF	COF	Neutral												
+BRAF	BRAF_p.V600E	n.d.	YES	YES	NO	COF	COF	Neutral	GOF											
+BRAF	BRAF_p.W450L	n.d.	NO	NO	NO	COF	COF	COF												
+CCND1	CCND1_p.E172K	COF	NO	NO	NO	Neutral	Neutral	Neutral												
+CGREF1	CGREF1_p.Q286K	Neutral	NO	NO	NO	COF	Neutral	Neutral												
+CGREF1	CGREF1_p.Q295K	Neutral	NO	NO	NO	COF	Neutral	Neutral												
+CTNNB1	CTNNB1_p.F777S	Neutral	NO	NO	NO	COF	Neutral	Neutral												
+CTNNB1	CTNNB1_p.G34V	GOF	NO	NO	NO	COF	COF	COF												
+CTNNB1	CTNNB1_p.G367V	Neutral	NO	NO	NO	COF	COF	COF												
+CTNNB1	CTNNB1_p.I140T	Neutral	NO	NO	YES	COF	COF	COF												
+CTNNB1	CTNNB1_p.S33N	GOF	NO	NO	NO	COF	COF	COF												
+CTNNB1	CTNNB1_p.S37C	GOF	NO	NO	NO	COF	COF	COF	GOF											
+CTNNB1	CTNNB1_p.S45F	GOF	NO	NO	NO	COF	COF	COF												
+CTNNB1	CTNNB1_p.V600G	GOF	NO	NO	NO	COF	COF	COF												
+DARC	DARC_p.T211S	n.d.	NO	NO	NO	n.d.	n.d.	n.d.												
+DARC	DARC_p.W253R	n.d.	NO	NO	NO	n.d.	n.d.	n.d.												
+DCAF8	DCAF8_p.E63K	Neutral	NO	NO	NO	Neutral	COF	Neutral												
+DCAF8	DCAF8_p.G588C	Neutral	YES	YES	NO	COF	COF	COF												
+DCAF8	DCAF8_p.P156S	Neutral	YES	YES	NO	Neutral	Neutral	Neutral												
+DCAF8	DCAF8_p.R559P	Neutral	YES	YES	NO	Neutral	COF	Neutral												
+DOK1	DOK1_p.P419S	n.d.	NO	NO	NO	COF	Neutral	Neutral												
+DOK1	DOK1_p.S460I	COF	NO	NO	NO	Neutral	Neutral	Neutral												
+DOK1	DOK1_p.V393L	Neutral	NO	NO	NO	Neutral	Neutral	Neutral												
+EGFR	EGFR_p.769_770insASV	n.d.	YES	YES	YES	n.d.	n.d.	n.d.												
+EGFR	EGFR_p.773_774insH	COF	YES	YES	NO	n.d.	n.d.	n.d.												
+EGFR	EGFR_p.774_775insHV	COF	YES	YES	NO	n.d.	n.d.	n.d.												
+EGFR	EGFR_p.D837A	n.d.	NO	NO	NO	n.d.	n.d.	n.d.	LOF											
+EGFR	EGFR_p.ELREA746del	COF	YES	NO	NO	n.d.	n.d.	n.d.	GOF											
+EGFR	"EGFR_p.ELREA746del,p.T790M"	GOF	YES	YES	NO	n.d.	n.d.	n.d.												
+EGFR	EGFR_p.H1129Y	COF	NO	YES	NO	Neutral	Neutral	COF												
+EGFR	EGFR_p.K754E	COF	NO	YES	YES	COF	COF	Neutral												
+EGFR	EGFR_p.L833F	n.d.	YES	YES	NO	COF	COF	Neutral												
+EGFR	EGFR_p.L858R	LOF	NO	NO	NO	COF	COF	COF	GOF											
+EGFR	EGFR_p.Q1020H	n.d.	NO	NO	NO	Neutral	Neutral	Neutral												
+EGFR	EGFR_p.R222L	LOF	NO	NO	NO	COF	COF	COF												
+EGFR	EGFR_p.S645C	GOF	NO	YES	YES	Neutral	COF	COF												
+EGFR	EGFR_p.T790M	n.d.	YES	YES	NO	COF	COF	Neutral												
+EGFR	"EGFR_p.T790M, p.L858R"	n.d.	YES	YES	NO	n.d.	n.d.	n.d.												
+ERBB2	ERBB2_p.D845A	n.d.	NO	NO	NO	n.d.	n.d.	n.d.	LOF											
+ERBB2	ERBB2_p.S310F	n.d.	YES	YES	NO	COF	COF	COF	GOF											
+ERBB2	ERBB2_p.S418T	n.d.	NO	YES	YES	Neutral	Neutral	COF												
+FAM173B	FAM173B_p.R187P	n.d.	NO	NO	NO	COF	COF	COF												
+FBXW7	FBXW7_p.D211N	Neutral	NO	NO	NO	Neutral	COF	Neutral												
+FBXW7	FBXW7_p.P620R	Neutral	NO	NO	NO	COF	COF	Neutral												
+FBXW7	FBXW7_p.V464E	LOF	NO	NO	NO	COF	COF	COF												
+FCGR3B	FCGR3B_p.K179T	n.d.	NO	NO	NO	Neutral	COF	Neutral												
+FCGR3B	FCGR3B_p.L218P	n.d.	NO	NO	NO	COF	COF	COF												
+FGFR3	FGFR3_p.D617A	n.d.	NO	NO	NO	n.d.	n.d.	n.d.												
+FGFR3	FGFR3_p.R399H	n.d.	NO	NO	NO	Neutral	Neutral	Neutral												
+FGFR3	FGFR3_p.S779R	n.d.	NO	NO	NO	n.d.	n.d.	n.d.												
+GPR137B	GPR137B_p.C212S	COF	NO	NO	NO	Neutral	COF	Neutral												
+GPR137B	GPR137B_p.S231F	LOF	NO	NO	NO	Neutral	COF	Neutral												
+GPR137B	GPR137B_p.Y135N	LOF	NO	NO	NO	COF	COF	COF												
+HAVCR2	HAVCR2_p.P6S	Neutral	NO	NO	NO	Neutral	Neutral	Neutral												
+IDH2	IDH2_p.K130del	n.d.	NO	NO	NO	n.d.	n.d.	n.d.												
+IDH2	IDH2_p.R188W	n.d.	NO	NO	NO	COF	COF	Neutral												
+IDH2	IDH2_p.S249G	n.d.	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.D389Y	LOF	NO	NO	NO	Neutral	COF	Neutral												
+KEAP1	KEAP1_p.D479G	LOF	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.E117K	LOF	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.E611D	Neutral	NO	NO	NO	Neutral	Neutral	Neutral												
+KEAP1	KEAP1_p.G333C	LOF	NO	NO	YES	COF	COF	COF	LOF											
+KEAP1	KEAP1_p.G417R	LOF	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.G419W	n.d.	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.G524C	LOF	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.G603W	LOF	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.L268P	LOF	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.P278S	LOF	NO	NO	NO	COF	COF	Neutral												
+KEAP1	KEAP1_p.R204P	LOF	NO	NO	NO	Neutral	COF	COF												
+KEAP1	KEAP1_p.R470H	LOF	NO	NO	NO	Neutral	COF	Neutral												
+KEAP1	KEAP1_p.R470S	LOF	NO	NO	NO	Neutral	COF	Neutral												
+KEAP1	KEAP1_p.R601W	LOF	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.S102L	LOF	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.S144F	Neutral	NO	NO	NO	COF	COF	Neutral												
+KEAP1	KEAP1_p.T142M	LOF	NO	NO	NO	COF	COF	COF												
+KEAP1	KEAP1_p.W497L	n.d.	NO	NO	NO	COF	COF	COF												
+KRAS	KRAS_p.D33E	COF	YES	YES	YES	Neutral	COF	Neutral												
+KRAS	KRAS_p.G12A	GOF	YES	YES	NO	COF	COF	COF	GOF											
+KRAS	KRAS_p.G12C	GOF	YES	YES	NO	COF	COF	COF	GOF											
+KRAS	KRAS_p.G12D	GOF	YES	YES	NO	COF	COF	COF	GOF											
+KRAS	KRAS_p.G12F	GOF	YES	YES	NO	COF	COF	COF	GOF											
+KRAS	KRAS_p.G12R	GOF	YES	YES	NO	COF	COF	COF	GOF											
+KRAS	KRAS_p.G12S	GOF	YES	YES	NO	COF	COF	Neutral	GOF											
+KRAS	KRAS_p.G12V	n.d.	YES	YES	NO	COF	COF	COF	GOF											
+KRAS	KRAS_p.G12Y	COF	YES	YES	NO	COF	COF	COF	GOF											
+KRAS	KRAS_p.G13C	n.d.	YES	YES	NO	COF	COF	COF	GOF											
+KRAS	KRAS_p.G13D	n.d.	YES	YES	NO	COF	COF	COF	GOF											
+KRAS	KRAS_p.G13V	GOF	YES	YES	YES	COF	COF	COF	GOF											
+MAPK7	MAPK7_p.D46N	Neutral	NO	NO	NO	Neutral	COF	Neutral												
+MAPK7	MAPK7_p.L806R	Neutral	NO	NO	NO	COF	COF	Neutral												
+MAPK7	MAPK7_p.T28I	Neutral	NO	NO	NO	Neutral	Neutral	Neutral												
+MAX	MAX_p.R35L	COF	NO	NO	NO	COF	COF	COF												
+MAX	MAX_p.R60del	COF	NO	NO	NO	n.d.	n.d.	n.d.												
+MDM2	MDM2_p.E421Q	Neutral	NO	NO	NO	Neutral	COF	COF												
+MDM2	MDM2_p.S221C	n.d.	NO	NO	NO	n.d.	n.d.	n.d.												
+MET	MET_ex14del	n.d.	YES	YES	NO	n.d.	n.d.	n.d.												
+MET	MET_p.Y1003F	n.d.	NO	NO	NO	Neutral	COF	Neutral												
+MET	MET_p.Y1235H	n.d.	NO	NO	NO	COF	COF	COF												
+MYC	MYC_p.E366Q	Neutral	NO	YES	NO	COF	COF	COF												
+NFE2L2	NFE2L2_p.T80K	GOF	NO	NO	NO	COF	COF	COF												
+NRAS	NRAS_p.Q61L	COF	YES	YES	NO	COF	COF	COF	GOF											
+PIK3CA	PIK3CA_p.E453Q	n.d.	YES	YES	NO	Neutral	Neutral	Neutral												
+PIK3CA	PIK3CA_p.E545K	n.d.	YES	YES	NO	COF	COF	Neutral	GOF											
+PIK3CA	PIK3CA_p.E600K	n.d.	YES	YES	NO	COF	COF	COF												
+PIK3CA	PIK3CA_p.E726K	n.d.	YES	YES	NO	Neutral	COF	Neutral												
+PIK3CA	PIK3CA_p.H1047R	n.d.	YES	YES	NO	Neutral	COF	Neutral	GOF											
+PIK3CA	PIK3CA_p.L699M	n.d.	NO	NO	NO	Neutral	COF	Neutral												
+PIK3CA	PIK3CA_p.Q137L	n.d.	NO	NO	NO	Neutral	Neutral	Neutral												
+PIK3CA	PIK3CA_p.R108H	n.d.	YES	NO	NO	Neutral	COF	COF												
+PIK3R3	PIK3R3_p.F380L	n.d.	NO	NO	NO	COF	COF	COF												
+PIK3R3	PIK3R3_p.M295T	n.d.	NO	NO	NO	COF	COF	COF												
+PIK3R3	PIK3R3_p.P127L	n.d.	NO	NO	NO	COF	COF	COF												
+PIK3R3	PIK3R3_p.R245C	n.d.	NO	NO	NO	Neutral	Neutral	Neutral												
+PPP2R1A	PPP2R1A_p.A541G	Neutral	NO	NO	NO	COF	Neutral	COF												
+PPP2R1A	PPP2R1A_p.C329F	Neutral	NO	NO	NO	Neutral	Neutral	Neutral												
+PPP2R1A	PPP2R1A_p.W140C	Neutral	NO	NO	NO	COF	COF	COF												
+PTEN	PTEN_p.H123Y	n.d.	NO	NO	NO	COF	COF	COF												
+PTEN	PTEN_p.M35I	n.d.	NO	NO	NO	COF	COF	COF												
+RB1	RB1_p.A772S	GOF	NO	NO	NO	Neutral	COF	Neutral												
+RB1	RB1_p.E398L	GOF	NO	NO	NO	Neutral	Neutral	COF												
+RB1	RB1_p.Y756C	GOF	NO	NO	NO	COF	COF	COF												
+RBM10	RBM10_p.E4K	n.d.	NO	NO	NO	COF	COF	Neutral												
+RBM10	RBM10_p.W658Y	n.d.	NO	NO	NO	COF	COF	COF												
+RBM10	RBM10_p.Y580F	n.d.	NO	NO	NO	Neutral	COF	Neutral												
+RBM45	RBM45_p.D434Y	LOF	NO	NO	NO	COF	COF	COF												
+RBM45	RBM45_p.M126I	LOF	NO	NO	NO	Neutral	COF	Neutral												
+RIT1	RIT1_p.A192T	Neutral	YES	YES	NO	Neutral	Neutral	Neutral												
+RIT1	RIT1_p.F82L	COF	YES	YES	YES	Neutral	COF	COF	GOF											
+RIT1	RIT1_p.R122L	GOF	YES	YES	YES	Neutral	COF	Neutral	GOF											
+RIT1	RIT1_p.T76insTDLT	GOF	YES	YES	YES	n.d.	n.d.	n.d.												
+SERPINB5	SERPINB5_p.A165T	n.d.	NO	NO	NO	COF	COF	Neutral												
+SERPINB5	SERPINB5_p.A42F	Neutral	NO	NO	NO	COF	COF	Neutral												
+SERPINB5	SERPINB5_p.A7T	Neutral	NO	NO	NO	COF	COF	COF												
+SERPINB5	SERPINB5_p.D141A	n.d.	NO	NO	NO	COF	COF	COF												
+SERPINB5	SERPINB5_p.I159S	COF	NO	NO	NO	COF	COF	COF												
+SMAD4	SMAD4_p.D493N	n.d.	NO	NO	NO	COF	COF	COF												
+SMAD4	SMAD4_p.G386V	n.d.	NO	NO	NO	COF	COF	COF												
+SMAD4	SMAD4_p.P215S	n.d.	NO	NO	NO	Neutral	Neutral	Neutral												
+SMAD4	SMAD4_p.P356R	n.d.	NO	NO	NO	COF	COF	COF												
+SMAD4	SMAD4_p.R361H	n.d.	NO	NO	NO	COF	COF	COF												
+SMAD4	SMAD4_p.V492F	n.d.	NO	NO	NO	COF	COF	COF												
+STC2	STC2_p.R5W	LOF	NO	NO	NO	COF	Neutral	Neutral												
+STK11	STK11_p.D176H	LOF	NO	NO	NO	COF	COF	COF												
+STK11	STK11_p.D194Y	LOF	NO	NO	NO	COF	COF	COF	LOF											
+STK11	STK11_p.G242W	LOF	NO	NO	NO	COF	COF	COF	LOF											
+STK11	STK11_p.G251F	LOF	NO	NO	NO	COF	COF	COF												
+STK11	STK11_p.G251V	LOF	NO	NO	NO	COF	COF	COF												
+STK11	STK11_p.G56V	LOF	NO	NO	NO	COF	COF	COF												
+STK11	STK11_p.L245F	n.d.	NO	NO	NO	COF	COF	Neutral												
+TERT	TERT_p.L593F	n.d.	NO	NO	NO	Neutral	Neutral	Neutral												
+TP53	TP53_p.P278H	n.d.	NO	NO	NO	COF	COF	COF												
+TP53	TP53_p.P278T	n.d.	NO	NO	NO	COF	COF	COF												
+TP53	TP53_p.R280G	n.d.	NO	NO	NO	COF	COF	COF												
+TPK1	TPK1_p.E81Q	GOF	NO	NO	NO	Neutral	Neutral	Neutral												
+TPK1	TPK1_p.G48C	COF	NO	NO	NO	COF	COF	COF												
+TPK1	TPK1_p.K111M	Neutral	NO	NO	NO	Neutral	COF	COF												
+TPK1	TPK1_p.L185I	GOF	NO	NO	NO	COF	COF	COF												
+TPK1	TPK1_p.P152T	Neutral	NO	NO	NO	COF	COF	COF												
+TPK1	TPK1_p.T205S	Neutral	NO	NO	NO	Neutral	Neutral	Neutral												
+TPK1	TPK1_p.T213S	Neutral	NO	NO	NO	Neutral	Neutral	Neutral												
+U2AF1	U2AF1_p.S34F	n.d.	NO	NO	NO	COF	COF	COF												
+ZBTB24	ZBTB24_p.G568C	COF	NO	NO	NO	COF	COF	Neutral												
+ZBTB24	ZBTB24_p.G693S	n.d.	NO	NO	NO	Neutral	Neutral	Neutral												
+ZBTB24	ZBTB24_p.K123M	NI	NO	NO	NO	COF	COF	Neutral												
+ZBTB24	ZBTB24_p.M78I	Neutral	NO	NO	NO	Neutral	Neutral	Neutral												
+ZBTB24	ZBTB24_p.Q669R	COF	NO	NO	NO	Neutral	COF	Neutral												
+ZNF597	ZNF597_p.L283V	LOF	NO	NO	NO	Neutral	COF	COF												
+ZNF597	ZNF597_p.R247T	n.d.	NO	NO	NO	COF	COF	COF												
+ZNF597	ZNF597_p.V21L	LOF	NO	NO	NO	COF	COF	COF												
+																				
+																				
+																				
+																				
+																				
+																				
