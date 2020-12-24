@@ -105,9 +105,11 @@ def lolli(gene2cohort,outdir):
 
         for key, val in count_dict.items():
             if val == 1 :
-                size=0.1
-            else:
-                size=val**2
+            #     size=0.1
+            # else:
+            #     size=val**2
+
+            size=val
 
             if key  in muts:
                 color= "#0000ff"
