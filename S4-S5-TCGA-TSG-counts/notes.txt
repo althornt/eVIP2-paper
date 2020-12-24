@@ -1,0 +1,68 @@
+TSG FS mutation frequency of at least 1% in one cancer cohort (171)
+
+
+5 mutations over > 5%
+  NPM1 W288Cfs*12 (25.2% in LAML)
+  RPL22 K15Rfs*5 (9% in UCEC and 5% in STAD)
+  RNF43 G659Vfs*41 (7% in UCEC 5% in STAD
+  ACVR2A K437Rfs*5 (7% in STAD)
+  LARP4B T163Hfs*47 (5% in STAD)
+
+
+
+8 genes with 2 or more FS mutations >1% (excluding mutations with count of 1). PTEN, MBD6, KMT2D, INPPL1, CTCF, ARID1A, APC, ACVR2A.
+
+
+
+16  PTEN  ucec_tcga_pan_can_atlas_2018   N323Kfs*2           2.079395               11
+13  PTEN  stad_tcga_pan_can_atlas_2018   K267Rfs*9           2.045455                9
+14  PTEN  ucec_tcga_pan_can_atlas_2018  D268Gfs*30           1.512287                8
+17  PTEN  ucec_tcga_pan_can_atlas_2018  N323Mfs*21           1.323251                7
+15  PTEN  ucec_tcga_pan_can_atlas_2018   K267Rfs*9           1.323251                7
+
+
+('MBD6',      gene                       tcga_cohort    mutation  percent_in_cohort  count_in_cohort
+162  MBD6  coadread_tcga_pan_can_atlas_2018   Q694Sfs*5           1.346801                8
+164  MBD6      ucec_tcga_pan_can_atlas_2018  Q734Nfs*18           1.323251                7
+163  MBD6      stad_tcga_pan_can_atlas_2018  Q734Nfs*18           1.136364                5)
+
+
+('KMT2D',      gene                       tcga_cohort      mutation  percent_in_cohort  count_in_cohort
+60  KMT2D      ucec_tcga_pan_can_atlas_2018   G1235Vfs*95           1.701323                9
+61  KMT2D      ucec_tcga_pan_can_atlas_2018   P2354Lfs*30           1.323251                7
+53  KMT2D  coadread_tcga_pan_can_atlas_2018   P2354Lfs*30           1.178451                7
+59  KMT2D      stad_tcga_pan_can_atlas_2018   P2354Lfs*30           1.136364                5
+
+
+('INPPL1',        gene                   tcga_cohort     mutation  percent_in_cohort  count_in_cohort
+184  INPPL1  ucec_tcga_pan_can_atlas_2018  R1156Gfs*46           2.835539               15
+185  INPPL1  ucec_tcga_pan_can_atlas_2018  P976Hfs*155           1.701323                9
+
+
+('CTCF',     gene                   tcga_cohort    mutation  percent_in_cohort  count_in_cohort
+74  CTCF  ucec_tcga_pan_can_atlas_2018  T204Nfs*26           2.457467               13
+75  CTCF  ucec_tcga_pan_can_atlas_2018  T204Qfs*18           1.512287                8
+
+
+('ARID1A',       gene                   tcga_cohort     mutation  percent_in_cohort  count_in_cohort
+25  ARID1A  stad_tcga_pan_can_atlas_2018  D1850Tfs*33           3.181818               14
+27  ARID1A  ucec_tcga_pan_can_atlas_2018  D1850Tfs*33           2.268431               12
+26  ARID1A  stad_tcga_pan_can_atlas_2018  F2141Sfs*59           1.590909                7
+30  ARID1A  ucec_tcga_pan_can_atlas_2018  F2141Sfs*59           1.323251                7
+29  ARID1A  ucec_tcga_pan_can_atlas_2018  K1072Nfs*21           1.323251                7
+28  ARID1A  ucec_tcga_pan_can_atlas_2018   D1850Gfs*4           1.134216                6
+
+
+('APC',    gene                       tcga_cohort    mutation  percent_in_cohort  count_in_cohort
+34  APC  coadread_tcga_pan_can_atlas_2018  T1556Nfs*3           1.851852               11
+35  APC  coadread_tcga_pan_can_atlas_2018  S1465Wfs*3           1.178451                7)
+
+
+('ACVR2A',        gene                       tcga_cohort   mutation  percent_in_cohort  count_in_cohort
+130  ACVR2A      stad_tcga_pan_can_atlas_2018  K437Rfs*5           7.045455               31
+132  ACVR2A      ucec_tcga_pan_can_atlas_2018  K437Rfs*5           4.536862               24
+129  ACVR2A  coadread_tcga_pan_can_atlas_2018  K437Rfs*5           1.851852               11
+131  ACVR2A      stad_tcga_pan_can_atlas_2018  D96Tfs*54           1.363636                6)
+
+
+
