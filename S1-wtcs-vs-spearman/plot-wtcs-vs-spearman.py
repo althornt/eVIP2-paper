@@ -98,6 +98,6 @@ props = dict(boxstyle='square', facecolor='grey', alpha=0.1)
 
 plt.text(1.5, 4, "pearson="+r2, fontsize=12,bbox=props)
 
-plt.savefig("wtcs-vs-spearman.png", dpi = 400, bbox_inches = "tight")
+plt.savefig("wtcs-vs-spearman.svg", dpi = 400, bbox_inches = "tight")
 plt.clf()
 plt.close()
