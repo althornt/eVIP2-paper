@@ -45,7 +45,7 @@ def  main():
     # genes over 5%
     #################
     print("Over 5% frequency")
-    results_over_5percent_1count = FS_df_combine[(FS_df_combine["percent_in_cohort"]>5) & (FS_df_combine["count_in_cohort"]>1)]
+    results_over_5percent_1count = FS_df_combine[(FS_df_combine["percent_in_cohort"]>5) & (FS_df_combine["count_in_cohort"]>5)]
     print(results_over_5percent_1count.drop(["df"],axis=1))
 
     gene2cohort = []
@@ -59,9 +59,9 @@ def  main():
         gene2cohort.append([key,muts,cohorts,dfs])
 
     # print(groupbygene)
-    # for i in gene2cohort:
-    #     print(i[0:3])
-    lolli(gene2cohort,"lollipops-FS-freq-over5")
+    for i in gene2cohort:
+        print(i[0:3])
+    # lolli(gene2cohort,"lollipops-FS-freq-over5")
 
 
     ###########################
@@ -69,9 +69,11 @@ def  main():
     ###########################
     gene2cohort_2 = []
 
-    results_over_1percent_1count = FS_df_combine[(FS_df_combine["percent_in_cohort"]>1) & (FS_df_combine["count_in_cohort"]>1)]
+    results_over_1percent_1count = FS_df_combine[(FS_df_combine["percent_in_cohort"]>1) & (FS_df_combine["count_in_cohort"]>5)]
     # print(results_over_1percent_1count)
     result_group = results_over_1percent_1count.groupby("gene")
+    print(results_over_1percent_1count.drop(["df"],axis=1))
+
 
     for key, item in result_group:
         if len(set(result_group.get_group(key)["mutation"].tolist())) > 1 :
@@ -84,11 +86,13 @@ def  main():
 
             gene2cohort_2.append([key,muts,cohorts, dfs_clear])
 
+            # print(result_group.get_group(key)[["gene","tcga_cohort","mutation","percent_in_cohort","count_in_cohort"]])
 
-    # for i in gene2cohort_2:
-    #     print(i[0:2])
 
-    lolli(gene2cohort_2, "lollipops-2-FS-freq-over1")
+    for i in gene2cohort_2:
+        print(i[0:3])
+
+    # lolli(gene2cohort_2, "lollipops-2-FS-freq-over1")
 
 
 
@@ -104,12 +108,12 @@ def lolli(gene2cohort,outdir):
         cmd = "./lollipops-v1.5.2-mac64/lollipops  -domain-labels=off    -w=1000 -o ./"+outdir+"/"+gene+"_out.svg  "+gene+" "
 
         for key, val in count_dict.items():
-            if val == 1 :
+            # if val == 1 :
             #     size=0.1
             # else:
             #     size=val**2
 
-            size=val
+            size=val**2
 
             if key  in muts:
                 color= "#0000ff"

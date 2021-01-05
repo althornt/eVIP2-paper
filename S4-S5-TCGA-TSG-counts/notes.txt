@@ -1,3 +1,89 @@
+
+ACVR2A ['K437fs', 'D96fs'] ['coadread_dfci_2016', 'coadread_tcga_pan_can_atlas_2018', 'stad_tcga_pan_can_atlas_2018', 'ucec_tcga_pan_can_atlas_2018']
+APC ['T1556fs', 'S1465fs'] ['coadread_dfci_2016', 'coadread_tcga_pan_can_atlas_2018']
+ARID1A ['F2141fs', 'K1072fs', 'D1850fs'] ['coadread_dfci_2016', 'stad_tcga_pan_can_atlas_2018', 'ucec_tcga_pan_can_atlas_2018']
+CDKN2A ['Y44fs', 'E88fs'] ['paad_tcga_pan_can_atlas_2018', 'esca_broad']
+CRIPAK ['T304fs', 'R58fs'] ['blca_dfarber_mskcc_2014']
+GATA3 ['P408fs', 'D335fs'] ['brca_tcga_pan_can_atlas_2018']
+HLA-B ['T211fs', 'P209fs'] ['coadread_tcga_pan_can_atlas_2018', 'esca_broad']
+INPPL1 ['P976fs', 'R1156fs'] ['ucec_tcga_pan_can_atlas_2018']
+KMT2D ['G1235fs', 'P2354fs'] ['coadread_tcga_pan_can_atlas_2018', 'stad_tcga_pan_can_atlas_2018', 'ucec_tcga_pan_can_atlas_2018']
+MBD6 ['Q694fs', 'Q734fs'] ['coadread_tcga_pan_can_atlas_2018', 'stad_tcga_pan_can_atlas_2018', 'ucec_tcga_pan_can_atlas_2018']
+PTEN ['K267fs', 'D268fs', 'N323fs'] ['stad_tcga_pan_can_atlas_2018', 'ucec_tcga_pan_can_atlas_2018']
+RNF43 ['G659fs', 'R117fs'] ['coadread_dfci_2016', 'coadread_tcga_pan_can_atlas_2018', 'stad_tcga_pan_can_atlas_2018', 'ucec_tcga_pan_can_atlas_2018']
+TP53 ['P128fs', 'P152fs'] ['esca_tcga_pan_can_atlas_2018', 'paad_tcga_pan_can_atlas_2018']
+ZFP36L2 ['G144fs', 'G107fs'] ['coadread_dfci_2016', 'coadread_tcga_pan_can_atlas_2018']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Over 5% frequency
+['CRIPAK', ['R58fs'], ['blca_dfarber_mskcc_2014']]
+['NF1', ['F2714fs'], ['blca_dfarber_mskcc_2014']]
+
+
+
+['NPM1', ['W288fs'], ['laml_tcga_pan_can_atlas_2018']]
+['RPL22', ['K15fs'], ['ucec_tcga_pan_can_atlas_2018', 'stad_tcga_pan_can_atlas_2018']]
+['RNF43', ['G659fs'], ['ucec_tcga_pan_can_atlas_2018', 'coadread_dfci_2016', 'stad_tcga_pan_can_atlas_2018']]
+['ACVR2A', ['K437fs'], ['stad_tcga_pan_can_atlas_2018']]
+['LARP4B', ['T163fs'], ['stad_tcga_pan_can_atlas_2018']]
+
+        gene                   tcga_cohort mutation  percent_in_cohort  count_in_cohort
+2472    NPM1  laml_tcga_pan_can_atlas_2018   W288fs          26.500000               53
+3266   RPL22  ucec_tcga_pan_can_atlas_2018    K15fs           9.073724               48
+3599   RNF43  ucec_tcga_pan_can_atlas_2018   G659fs           7.939509               42
+4473  ACVR2A  stad_tcga_pan_can_atlas_2018   K437fs           7.727273               34
+3558   RNF43            coadread_dfci_2016   G659fs           5.169628               32
+3263   RPL22  stad_tcga_pan_can_atlas_2018    K15fs           5.909091               26
+3590   RNF43  stad_tcga_pan_can_atlas_2018   G659fs           5.681818               25
+4226  LARP4B  stad_tcga_pan_can_atlas_2018   T163fs           5.454545               24
+1658     NF1       blca_dfarber_mskcc_2014  F2714fs           6.000000                3
+4297  CRIPAK       blca_dfarber_mskcc_2014    R58fs           6.000000                3
+
+
+
+['NPM1', ['W288fs'], ['laml_tcga_pan_can_atlas_2018']]
+['RPL22', ['K15fs'], ['ucec_tcga_pan_can_atlas_2018', 'stad_tcga_pan_can_atlas_2018']]
+['RNF43', ['G659fs'], ['ucec_tcga_pan_can_atlas_2018', 'coadread_dfci_2016', 'stad_tcga_pan_can_atlas_2018']]
+['ACVR2A', ['K437fs'], ['stad_tcga_pan_can_atlas_2018']]
+['LARP4B', ['T163fs'], ['stad_tcga_pan_can_atlas_2018']]
+
+
+
+
+
+
+
+
+
+
+
+
 TSG FS mutation frequency of at least 1% in one cancer cohort (171)
 
 
