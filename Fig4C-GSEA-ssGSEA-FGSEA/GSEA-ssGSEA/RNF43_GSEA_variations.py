@@ -84,7 +84,7 @@ def main():
                 for method in ["signal_to_noise","t_test","ratio_of_classes","diff_of_classes","log2_ratio_of_classes"]:
                     variation = name+"_"+label+"_"+permtype+"_"+method
                     GSEA(comparison,input,variation,permtype,method)
-    
+
 
     # comparing all results
     all_files = glob.glob("GSEA_out/*/*.csv")
@@ -135,7 +135,7 @@ def main():
                         gene_sets="../h.all.v6.0.symbols.gmt", \
                         outdir="ssGSEA_out/"+label+"_"+method,\
                         processes=20, min_size = 10, \
-                        sample_norm_method = method, no_plot=True)
+                        sample_norm_method = method, no_plot=True,seed=7)
 
             all_assay_pathways= ["HALLMARK_WNT_BETA_CATENIN_SIGNALING","HALLMARK_NOTCH_SIGNALING",
             "HALLMARK_P53_PATHWAY","HALLMARK_TGF_BETA_SIGNALING","HALLMARK_E2F_TARGETS",
@@ -262,7 +262,7 @@ def GSEA(samples,file_path,out_dir_name,permtype,method):
                 gene_sets=hallmark_gmt, \
                 cls=samples_cls, outdir="GSEA_out/"+out_dir_name,\
                 processes=20, permutation_type = permtype, \
-                min_size = 10, method = method, no_plot=True)
+                min_size = 10, method = method, no_plot=True, seed=123)
 
 
     #signficant results (FDR < .25)
