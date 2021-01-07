@@ -46,8 +46,6 @@ Three types of sample_norm_method
 """
 
 def main():
-    # global out_dir
-    # out_dir = "/private/groups/brookslab/althornt/eVIP-analysis/eVIP2-revision-analysis-2020/RNF43_GSEA_r_12172020"
     eVIP2_out_dir = "/Users/alexis/Desktop/eVIP2/tutorial_files/eVIP2_out_20201223/"
     kallisto_genes_file = eVIP2_out_dir+"kallisto_files/combined_kallisto_abundance_genes.tsv"
 
@@ -111,14 +109,15 @@ def main():
     sig_frame.to_csv("significant_combined_GSEA_results.csv")
 
     ##########################
-    # Evaluating results
+    # Evaluating GSEA results
     ###########################
     sig_frame = pd.read_csv("significant_combined_GSEA_results.csv",index_col=0)
     calc(sig_frame)
 
+
     ##########################
     # Running SSEA
-    ###########################
+    ##########################
 
     ssGSEA_dfs=  []
 
@@ -137,20 +136,25 @@ def main():
                         processes=20, min_size = 10, \
                         sample_norm_method = method, no_plot=True,seed=7)
 
-            all_assay_pathways= ["HALLMARK_WNT_BETA_CATENIN_SIGNALING","HALLMARK_NOTCH_SIGNALING",
-            "HALLMARK_P53_PATHWAY","HALLMARK_TGF_BETA_SIGNALING","HALLMARK_E2F_TARGETS",
-            "HALLMARK_G2M_CHECKPOINT","HALLMARK_TNFA_SIGNALING_VIA_NFKB","HALLMARK_MYC_TARGETS_V1",
-            "HALLMARK_MYC_TARGETS_V2","HALLMARK_HYPOXIA","HALLMARK_KRAS_SIGNALING_UP",
-            "HALLMARK_KRAS_SIGNALING_DN","HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION"]
 
-            ssGSEA_out = ssGSEA_out.res2d[ssGSEA_out.res2d.index.isin(all_assay_pathways)]
-            ssGSEA_dfs.append(ssGSEA_out)
+            ssGSEA_dfs.append(ssGSEA_out.res2d)
 
     all_ssGSEA = pd.concat(ssGSEA_dfs,axis=1)
     all_ssGSEA = all_ssGSEA.sort_index()
-    print(all_ssGSEA)
-
+    # print(all_ssGSEA)
     all_ssGSEA.to_csv("ssGSEA_NES.csv")
+
+    all_assay_pathways= ["HALLMARK_WNT_BETA_CATENIN_SIGNALING","HALLMARK_NOTCH_SIGNALING",
+    "HALLMARK_P53_PATHWAY","HALLMARK_TGF_BETA_SIGNALING","HALLMARK_E2F_TARGETS",
+    "HALLMARK_G2M_CHECKPOINT","HALLMARK_TNFA_SIGNALING_VIA_NFKB","HALLMARK_MYC_TARGETS_V1",
+    "HALLMARK_MYC_TARGETS_V2","HALLMARK_HYPOXIA","HALLMARK_KRAS_SIGNALING_UP",
+    "HALLMARK_KRAS_SIGNALING_DN","HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION"]
+
+    all_ssGSEA = all_ssGSEA[all_ssGSEA.index.isin(all_assay_pathways)]
+
+    ##########################
+    # plot SSEA NES scores
+    ##########################
 
     sns.stripplot(data=all_ssGSEA.T,edgecolor="black",alpha=.05,size=8,linewidth=1.0,jitter=.01,color="blue")
     plt.title("NES across ssGSEA runs for each RNF43 G659fs sample")
@@ -196,11 +200,10 @@ def calc(df):
     df.loc["Specificity"] = df.loc["TN"]/(df.loc["FP"]+df.loc["TN"])*100
     df.loc["PPV"] = df.loc["TP"]/(df.loc["TP"]+df.loc["FP"])*100
     df.loc["NPV"] = df.loc["TN"]/(df.loc["FN"]+df.loc["TN"])*100
-
     df.loc["TPR"] = (df.loc["Sensitivity"])/100
     df.loc["FPR"] = (100- df.loc["Specificity"])/100
 
-    df.to_csv("significant_combined_GSEA_results_sensitivity.csv")
+    df.to_csv("significant_combined_GSEA_results_eval.csv")
 
     # print(df.T[["Sensitivity","Specificity"]])
 
@@ -242,7 +245,6 @@ def GSEA(samples,file_path,out_dir_name,permtype,method):
     permtype: type of permutation
     """
 
-    print("----------------------------------------------------------------------------------------")
     print(out_dir_name)
     print("\n")
 
