@@ -5,6 +5,8 @@ from matplotlib.patches import Rectangle
 from collections import Counter
 from lifelines import KaplanMeierFitter
 from lifelines.statistics import logrank_test
+from lifelines.statistics import survival_difference_at_fixed_point_in_time_test
+
 
 import os
 import itertools
@@ -149,6 +151,26 @@ def KM(KM_df, list1,label1, list2, label2):
     p = results.p_value
     print(p)
 
+
+    ##################
+
+    df = load_waltons()
+    print(df)
+    ix = df['group'] == 'miR-137'
+    T_exp, E_exp = df.loc[ix, 'T'], df.loc[ix, 'E']
+    T_con, E_con = df.loc[~ix, 'T'], df.loc[~ix, 'E']
+
+    kmf_exp = KaplanMeierFitter(label="exp").fit(T_exp, E_exp)
+    kmf_con = KaplanMeierFitter(label="con").fit(T_con, E_con)
+
+    point_in_time = 10.
+    results = survival_difference_at_fixed_point_in_time_test(point_in_time, kmf_exp, kmf_con)
+    results.print_summary()
+
+    sys.exit()
+
+    ################
+
     kmf = KaplanMeierFitter()
     plt.figure(figsize=(4,3))
     ax = plt.subplot(111)
@@ -157,6 +179,9 @@ def KM(KM_df, list1,label1, list2, label2):
         print(name)
         kmf.fit(grouped_df["Overall Survival (Months)"], grouped_df["Overall Survival Status"], label=name)
         kmf.plot_survival_function(ax=ax,ci_show=False)
+
+
+
 
     ax.set_ylabel('Percent Survival')
     ax.set_xlabel('Months')
