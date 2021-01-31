@@ -205,32 +205,17 @@ def main():
 
 
     global hypoxia_genes
-    # hypoxia_genes = ["HIF1A","ENO2"]
     hypoxia_genes = ["HIF1A"]
 
     global emt_genes
-    # emt_genes = ["TWIST1","SNAI1","COMP","CDH1","VIM","DKK1","CDH2","FN1"]
     emt_genes = ["TWIST1","SNAI1"]
 
     global nfkb_genes
-    # nfkb_genes = ["NFKB1","NFKB2","RELB","IL8","IL6"]
     nfkb_genes = ["NFKB1","NFKB2","RELB"]
 
 
     for df in [tcga_exp_coadread]:
-        # clustermap(score_mut,df,mapkgenes+wnt+mmr,"og" )
-        # clustermap(score_mut,df,mapkgenes+wnt+mmr+["TWIST1","SNAI1"]+["HIF1A","ARNT"]+["MACC1"],"og" )
-        clustermap(score_mut,df,mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+["TWIST1","SNAI1"],"og" )
-
-        # clustermap(score_mut,df,mapkgenes+wnt+mmr+["TWIST1","SNAI1","COMP","CDH1","VIM","DKK1","CDH2","FN1"],"TWIST1" )
-        # clustermap(score_mut,df,mapkgenes+wnt+mmr+nfkb_genes,"nfkb_genes" )
-        # clustermap(score_mut,df,mapkgenes+wnt+mmr+["TWIST1","SNAI1","COMP","CDH1","VIM","DKK1","CDH2","FN1"]+["HIF1A","ENO2"],"og_with_emt_hypoxia" )
-        # clustermap(score_mut,df,mapkgenes+wnt+mmr+emt_genes+hypoxia_genes+NFKB_genes+["MAPK14","MAPK9"],"og_with_emt_hypoxia_tnf" )
-        # clustermap(score_mut,df,mapkgenes+wnt+mmr+emt_genes+hypoxia_genes+NFKB_genes,"og_with_emt_hypoxia_tnf" )
-        # clustermap(score_mut,df,NFKB_genes,"NFKB_genes" )
-        # clustermap(score_mut,df,mmr+wnt+dusp4_like_tail[0:5]+dusp4_like_head[0:5]+etv5_like_tail[0:5]+etv5_like_head[0:5],"og_new" )
-        # clustermap(score_mut,df,mapkgenes+wnt+mmr+candidate_genes,"high_corr" )
-
+        clustermap(score_mut,df,mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+emt_genes,"og" )
 
 
 
@@ -260,6 +245,14 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     xenaclinical = xenaclinical.loc[~xenaclinical.index.duplicated(keep="first")]
     tcga_exp = tcga_exp.append(xenaclinical["CDE_ID_3226963"].transpose())
 
+    #adding driver status of all mapk/rtk genes
+    mapk_driver_status = pd.read_csv("inputs/cbioportal-MAPK-RTK-genes-driver-sample-matrix.txt",
+                    sep="\t", index_col = 0)
+    mapk_driver_status.index =  [i.split(":")[1][:-3] for i in mapk_driver_status.index]
+    mapk_driver_status = mapk_driver_status[mapk_driver_status.index.isin(tcga_exp.columns)]
+
+    tcga_exp = tcga_exp.append(mapk_driver_status["Altered"].transpose())
+
     ##################################
     # adding color columns
     ##################################
@@ -270,6 +263,17 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     RNF43_muts  = tcga_exp.loc["RNF43_muts"].tolist()
     KRAS_muts = tcga_exp.loc["KRAS_muts"].tolist()
     msi_status = tcga_exp.loc["CDE_ID_3226963"].tolist()
+    mapk_pway_driver_status = tcga_exp.loc["Altered"].tolist()
+
+    #convert MAPK driver status to color
+    mapk_pway_driver_status_c = []
+    for i in mapk_pway_driver_status:
+        if i == 0:
+            mapk_pway_driver_status_c.append("#f0edf2")
+        elif i == 1:
+            mapk_pway_driver_status_c.append("black")
+        else:
+            mapk_pway_driver_status_c.append("#f0edf2")
 
     #convert MSI status to color
     msi_status_c = []
@@ -279,7 +283,7 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
         elif i == "MSI-L":
             msi_status_c.append("indianred")
         elif i == "MSS":
-            msi_status_c.append("silver")
+            msi_status_c.append("mistyrose")
         else:
             msi_status_c.append("#f0edf2")
 
@@ -289,7 +293,7 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     for i in KRAS_muts:
         res = any(ele in str(i) for ele in g12)
         if res ==  True:
-            kras_status_c.append("black")
+            kras_status_c.append("gray")
         else:
             kras_status_c.append("#f0edf2")
 
@@ -344,16 +348,9 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
 
 
     #prep df for clustermap
-    tcga_exp = tcga_exp.drop("RNF43_TRUNCATING", axis=0)
-    tcga_exp = tcga_exp.drop("BRAF_MISSENSE", axis=0)
-    tcga_exp = tcga_exp.drop("x", axis=0)
-    tcga_exp = tcga_exp.drop("x_color", axis=0)
-    tcga_exp = tcga_exp.drop("RNF43_muts", axis=0)
-    tcga_exp = tcga_exp.drop("KRAS_muts", axis=0)
-    tcga_exp = tcga_exp.drop("CDE_ID_3226963", axis=0)
-
+    tcga_exp = tcga_exp.drop(["RNF43_TRUNCATING","BRAF_MISSENSE","x","x_color",
+                "RNF43_muts","KRAS_muts","CDE_ID_3226963","Altered"], axis=0)
     tcga_exp = tcga_exp.convert_objects(convert_numeric=True)
-
 
     #now with only genes rows left, label colors
     gene_colors = []
@@ -373,20 +370,13 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
         else:
             gene_colors.append("pink")
 
-
-
-    # for i in ["single","complete", "average", "weighted", "centroid","median","ward"]:
-    # sns.clustermap(tcga_exp,z_score=0,center=0,cmap="coolwarm",xticklabels=False,
-    #             yticklabels=True,row_colors=gene_colors, method = "ward",
-    #             colors_ratio = .02, figsize = (12,8),
-    #             col_colors=[lure_scale_c,braf_status_c,rnf43_status_c,RNF43_mut_type_c],
-    #             row_cluster=True, cbar_pos=None,vmin=-5, vmax=4)
-
-
+    ################
+    # clustermap
+    ################
     sns.clustermap(tcga_exp,z_score=0,center=0,cmap="bwr",xticklabels=False,
                 yticklabels=True,row_colors=gene_colors, method = "ward",
                 colors_ratio = .03, figsize = (12,8),
-                col_colors=[lure_scale_c,braf_status_c,rnf43_status_c,RNF43_mut_type_c,kras_status_c,msi_status_c],
+                col_colors=[lure_scale_c,braf_status_c,rnf43_status_c,RNF43_mut_type_c,mapk_pway_driver_status_c,kras_status_c,msi_status_c],
                 row_cluster=True)
 
     plt.tight_layout()
@@ -400,6 +390,7 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     # Putting legends and colorbars in another file
     ##################################################################
 
+    #gene row patches
     mapk_patch = mpatches.Patch(color='black', label='MAPK')
     nfkb_patch = mpatches.Patch(color='purple', label='NFKB')
     hypoxia_patch = mpatches.Patch(color='crimson', label='Hypoxia')
@@ -408,6 +399,11 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     mmr_patch = mpatches.Patch(color='plum', label='MMR')
     plt.legend(handles=[mapk_patch,nfkb_patch,hypoxia_patch,wnt_patch,emt_patch, mmr_patch],loc='upper center')
 
+    #msi status patch
+    msi_high_patch = mpatches.Patch(color='darkred', label='MSI-H')
+    msi_low_patch = mpatches.Patch(color='indianred', label='MSI-L')
+    mss_patch = mpatches.Patch(color='mistyrose', label='MSS')
+    plt.legend(handles=[msi_high_patch,msi_low_patch,mss_patch],loc='lower left')
 
     #color baar for LURE classifier score
     sm = plt.cm.ScalarMappable(cmap=plt.cm.YlGn, norm=plt.Normalize(vmin=0, vmax=1))
