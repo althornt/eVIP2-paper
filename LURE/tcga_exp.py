@@ -204,13 +204,13 @@ def main():
 
 
 
-    global hypoxia_genes
+    global hypoxia_genes,emt_genes,nfkb_genes
     hypoxia_genes = ["HIF1A"]
 
-    global emt_genes
+    # global
     emt_genes = ["TWIST1","SNAI1"]
 
-    global nfkb_genes
+    # global nfkb_genes
     nfkb_genes = ["NFKB1","NFKB2","RELB"]
 
 
