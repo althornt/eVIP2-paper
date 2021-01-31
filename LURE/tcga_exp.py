@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
 def main():
-    #BRAF-scores from LURE
+    #BRAF-scores and RNF43 mutants generated from LURE lolli script
     score_mut = pd.read_csv("outputs/LUREscore_mut_status.csv", index_col=0)
 
     #Xena - gene-level transcription estimates, as in log2(x+1) transformed RSEM normalized count
@@ -220,6 +220,10 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     wnt_patch = mpatches.Patch(color='cornflowerblue', label='WNT')
     mmr_patch = mpatches.Patch(color='plum', label='MMR')
     plt.legend(handles=[mapk_patch,nfkb_patch,hypoxia_patch,wnt_patch,emt_patch, mmr_patch],loc='upper center')
+    plt.savefig("outputs/clustermaps/tcga_heatmap_legend1.svg",bbox_inches = "tight",dpi=400)
+    plt.savefig("outputs/clustermaps/tcga_heatmap_legend1.png",bbox_inches = "tight",dpi=400)
+    plt.clf()
+    plt.close()
 
     #msi status patch
     msi_high_patch = mpatches.Patch(color='darkred', label='MSI-H')
@@ -237,8 +241,8 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     sm._A = []
     plt.colorbar(sm)
 
-    plt.savefig("outputs/clustermaps/tcga_heatmap_legend.png",bbox_inches = "tight",dpi=400)
-    plt.savefig("outputs/clustermaps/tcga_heatmap_legend.svg",bbox_inches = "tight",dpi=400)
+    plt.savefig("outputs/clustermaps/tcga_heatmap_legend2.png",bbox_inches = "tight",dpi=400)
+    plt.savefig("outputs/clustermaps/tcga_heatmap_legend2.svg",bbox_inches = "tight",dpi=400)
     plt.clf()
     plt.close()
 

@@ -83,7 +83,7 @@ def main():
     score_mut = cbio_giannakis.join(lure_score, how='outer') # add LURE score
     score_mut = score_mut.join(lure, how='outer') # add LURE matrix
 
-    # score_mut.to_csv("outputs/LUREscore_mut_status.csv")
+    score_mut.to_csv("outputs/LUREscore_mut_status.csv")
 
     # print(score_mut.sort_values(by="x").to_string())
 
