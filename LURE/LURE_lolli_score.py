@@ -70,7 +70,7 @@ def main():
         except: #only when trying to add nan to list
             pass
 
-    cbio_giannakis["RNF43"].to_csv("outputs/giannakais_cbioportal_RNF43_truncating_variants.csv")
+    # cbio_giannakis["RNF43"].to_csv("outputs/giannakais_cbioportal_RNF43_truncating_variants.csv")
 
     ##########################
     # LURE classifier scores
@@ -82,6 +82,8 @@ def main():
     lure_score.index = [i.replace(".","-") for i in lure_score.index]
     score_mut = cbio_giannakis.join(lure_score, how='outer') # add LURE score
     score_mut = score_mut.join(lure, how='outer') # add LURE matrix
+
+    # score_mut.to_csv("outputs/LUREscore_mut_status.csv")
 
     # print(score_mut.sort_values(by="x").to_string())
 
@@ -155,7 +157,7 @@ def main():
     plt.figure(figsize=(10,1.5))
     ax = plt.subplot(111)
     ax = sns.stripplot(x="RNF43", y="x", data=score_mut_RNF43_noBRAF_unique,
-                        color="black", jitter=False, s=12, alpha=.8,
+                        color="black", jitter=False, s=7, alpha=.8,
                         order = [ 'L17*',  'R117fs', 'R145*', 'A629fs', 'G659fs'])
 
     plt.axhline(y=0.5, color = "red")
@@ -163,7 +165,7 @@ def main():
     plt.ylim((.3,.85))
 
     plt.xlabel('', fontsize=18)
-    plt.ylabel('Classifier Score', fontsize=16)
+    plt.ylabel('Classifier Score', fontsize=13)
 
     plt.savefig("outputs/stripplot_lure_score_single_RNF43_noBRAF.png",dpi=300,bbox_inches="tight")
     plt.savefig("outputs/stripplot_lure_score_single_RNF43_noBRAF.svg",dpi=300,bbox_inches="tight")
@@ -317,9 +319,9 @@ def main():
     BRAF_RNF43_score_df["RNF43_TRUNC_BRAF_MISS"]=RNF43_TRUNC_BRAF_MISS["x"]
 
     #no samples with less than 2 nan (no overlap in groups)
-    print(BRAF_RNF43_score_df[BRAF_RNF43_score_df.isnull().sum(axis=1)<2])
+    # print(BRAF_RNF43_score_df[BRAF_RNF43_score_df.isnull().sum(axis=1)<2])
 
-    plt.figure()
+    plt.figure(figsize=(6,3))
     ax = plt.subplot(111)
     ax = sns.boxplot(data=BRAF_RNF43_score_df , palette="Blues", showfliers=False)
     test_results = add_stat_annotation(ax, data=BRAF_RNF43_score_df,box_pairs=[("RNF43_WT_BRAF_WT", "RNF43_TRUNC_BRAF_MISS"),
@@ -339,7 +341,7 @@ def main():
     plt.savefig("outputs/boxplot_scores_RNF43_BRAF_status.png",dpi=300,bbox_inches="tight")
     plt.savefig("outputs/boxplot_scores_RNF43_BRAF_status.svg",dpi=300,bbox_inches="tight")
 
-
+    """
     ################
     # KM
     ###############
@@ -372,8 +374,6 @@ def main():
     BRAF_muts.index = [i[:-3] for i in BRAF_muts.index]
     braf_v600e = BRAF_muts[BRAF_muts["BRAF"].str.contains("V600E")].index.tolist()
     braf_wt = BRAF_muts[BRAF_muts["BRAF"]=="WT"].index.tolist()
-
-
 
 
     RNF43_WT_BRAF_WT_samples = [i for i in RNF43_WT_BRAF_WT.index.tolist() if i in right_samples and braf_wt]
@@ -416,10 +416,12 @@ def main():
     RNF43_TRUNC_BRAF_WT_samples_low = [i for i in RNF43_TRUNC_BRAF_WT_samples if i not in high_scores]
 
 
-    print(len(RNF43_TRUNC_BRAF_WT_samples_high),len(RNF43_TRUNC_BRAF_WT_samples_low))
+    # print(len(RNF43_TRUNC_BRAF_WT_samples_high),len(RNF43_TRUNC_BRAF_WT_samples_low))
 
 
     KM(KM_df,RNF43_TRUNC_BRAF_WT_samples_low, "RNF43_TRUNC_BRAF_WT_samples_low", RNF43_TRUNC_BRAF_WT_samples_high, "RNF43_TRUNC_BRAF_WT_samples_high")
+
+    """
 
 
 
