@@ -7,6 +7,8 @@ import matplotlib
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from scipy import stats
+
 
 def main():
     #BRAF-scores and RNF43 mutants generated from LURE lolli script
@@ -22,6 +24,13 @@ def main():
     score_mut = score_mut.merge(kras_mut["KRAS"], how='outer', left_index=True, right_index=True)
     score_mut = score_mut[score_mut['x'].notna()]
 
+
+    #z-score expression data
+    tcga_exp_coadread_zscore = stats.zscore(tcga_exp_coadread, axis=1)
+    tcga_exp_coadread = pd.DataFrame(tcga_exp_coadread_zscore,
+                columns = tcga_exp_coadread.columns,
+                index = tcga_exp_coadread.index)
+
     ##########################
     # make clustermap
     #########################
@@ -35,8 +44,30 @@ def main():
     wnt = ["AXIN2", "NKD1", "RNF43", "ZNRF3","WIF1"]
     mmr = ["MLH1"]
 
-    clustermap(score_mut,tcga_exp_coadread,mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+emt_genes,"final" )
+    clustermap(score_mut,tcga_exp_coadread,mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+emt_genes,"full" )
 
+    ############################################
+    #plot only WT BRAF and RNF43 TRUNC samples
+
+    score_mut_BRAFWT_RNF43_trunc = score_mut[(score_mut["BRAF_MISSENSE"].isna()) & (~score_mut["RNF43"].isna())]
+    clustermap(score_mut_BRAFWT_RNF43_trunc,tcga_exp_coadread,mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+emt_genes,"_BRAFWT_RNF43_TRUNC" )
+    clustermap(score_mut_BRAFWT_RNF43_trunc,tcga_exp_coadread,mapkgenes,"_BRAFWT_RNF43_TRUNC_mapk" )
+
+    ############################################
+    #plot only WT BRAF and only RNF43 G659fs samples (no other RNF43 TRUNC variants either)
+
+    score_mut_BRAFWT_RNF43_659 = score_mut[(score_mut["BRAF_MISSENSE"].isna()) & (score_mut["RNF43"] == "['G659fs']")]
+    clustermap(score_mut_BRAFWT_RNF43_659,tcga_exp_coadread,mapkgenes,"_BRAFWT_RNF43_G659fs_mapk" )
+    clustermap(score_mut_BRAFWT_RNF43_659,tcga_exp_coadread,mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+emt_genes,"_BRAFWT_RNF43_G659fs" )
+
+
+    # ############################################
+    # # which RTK/RAS/MAPK/ events occur in RNF43
+    # #adding driver status of all mapk/rtk genes
+    # mapk_driver_status = pd.read_csv("inputs/cbioportal-MAPK-RTK-genes-driver-sample-matrix.txt",
+    #                 sep="\t", index_col = 0)
+    #
+    # print(mapk_driver_status)
 
 
 def clustermap(score_mut,tcga_exp, gene_list,  label ):
@@ -195,11 +226,18 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     ################
     # clustermap
     ################
-    sns.clustermap(tcga_exp,z_score=0,center=0,cmap="bwr",xticklabels=False,
+    # sns.clustermap(tcga_exp,z_score=0,center=0,cmap="bwr",xticklabels=False,
+    #             yticklabels=True,row_colors=gene_colors, method = "ward",
+    #             colors_ratio = .03, figsize = (12,8),
+    #             col_colors=[lure_scale_c,braf_status_c,rnf43_status_c,RNF43_mut_type_c,mapk_pway_driver_status_c,kras_status_c,msi_status_c],
+    #             row_cluster=True)
+
+    sns.clustermap(tcga_exp,center=0,cmap="bwr",xticklabels=False,
                 yticklabels=True,row_colors=gene_colors, method = "ward",
                 colors_ratio = .03, figsize = (12,8),
                 col_colors=[lure_scale_c,braf_status_c,rnf43_status_c,RNF43_mut_type_c,mapk_pway_driver_status_c,kras_status_c,msi_status_c],
                 row_cluster=True)
+
 
     plt.tight_layout()
     plt.savefig("outputs/clustermaps/tcga_heatmap_"+label+".png",bbox_inches = "tight",dpi=400)
