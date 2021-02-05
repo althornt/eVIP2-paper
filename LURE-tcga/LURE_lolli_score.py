@@ -324,12 +324,16 @@ def main():
     plt.figure(figsize=(6,3))
     ax = plt.subplot(111)
     ax = sns.boxplot(data=BRAF_RNF43_score_df , palette="Blues", showfliers=False)
-    test_results = add_stat_annotation(ax, data=BRAF_RNF43_score_df,box_pairs=[("RNF43_WT_BRAF_WT", "RNF43_TRUNC_BRAF_MISS"),
-                                        ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_MISS"),
-                                        ("RNF43_TRUNC_BRAF_WT", "RNF43_TRUNC_BRAF_MISS"),
-                                        ("RNF43_WT_BRAF_WT","RNF43_TRUNC_BRAF_WT")],
-                                       test='Mann-Whitney', text_format='star',
+    test_results = add_stat_annotation(ax, data=BRAF_RNF43_score_df,box_pairs=[
+                                                    ("RNF43_WT_BRAF_WT", "RNF43_WT_BRAF_MISS"),
+                                                    ("RNF43_WT_BRAF_WT","RNF43_TRUNC_BRAF_WT"),
+                                                    ("RNF43_WT_BRAF_WT", "RNF43_TRUNC_BRAF_MISS"),
+                                                    ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_WT"),
+                                                    ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_MISS"),
+                                                    ("RNF43_TRUNC_BRAF_WT", "RNF43_TRUNC_BRAF_MISS")],
+                                       test='Kruskal',comparisons_correction=None, text_format='star',
                                        loc='outside', verbose=2)
+
     ax = sns.stripplot(data=BRAF_RNF43_score_df, color="black", alpha= 0.2, s=7, jitter=.05)
     ax.set_xticklabels( ('RNF43 WT\nBRAF WT', 'RNF43 WT\nBRAF MISS','RNF43 TRUNC\nBRAF WT','RNF43 TRUNC\nBRAF MISS') )
 
