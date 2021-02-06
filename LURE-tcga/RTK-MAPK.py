@@ -5,6 +5,7 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as  np
 from scipy import stats
+from statannot import add_stat_annotation
 
 
 
@@ -22,6 +23,9 @@ tcga_exp = pd.DataFrame(tcga_exp_,
 
 #BRAF-scores and RNF43 mutants generated from LURE lolli script
 score_mut = pd.read_csv("outputs/LUREscore_mut_status.csv", index_col=0)
+
+RNF43_G659fs_samples_contains = score_mut[score_mut["RNF43"].str.contains("G659fs", na=False)]["RNF43"].index.tolist()
+RNF43_G659fs_samples_only = score_mut[score_mut["RNF43"] == "['G659fs']" ]["RNF43"].index.tolist()
 
 #adding driver status of all mapk/rtk genes
 mapk_driver_status = pd.read_csv("inputs/cbioportal-MAPK-RTK-genes-driver-sample-matrix.txt",
@@ -147,7 +151,7 @@ plt.savefig("outputs/testt.png",bbox_inches = "tight",dpi=400)
 plt.clf()
 plt.close()
 """
-
+"""
 for i in [(RNF43_WT_BRAF_WT.index.tolist(),"RNF43_WT_BRAF_WT"),
     (RNF43_WT_BRAF_MISS.index.tolist(),"RNF43_WT_BRAF_MISS"),
     (RNF43_TRUNC_BRAF_WT.index.tolist(),"RNF43_TRUNC_BRAF_WT"),
@@ -199,3 +203,48 @@ for i in [(RNF43_WT_BRAF_WT.index.tolist(),"RNF43_WT_BRAF_WT"),
     plt.savefig("outputs/"+str(i[1])+".png",bbox_inches = "tight",dpi=400)
     plt.clf()
     plt.close()
+"""
+
+###################################
+#  Boxplot
+###################################
+#get expression values from 4 groups
+
+tcga_exp_l = pd.read_csv("inputs/cbioportal_data_RNA_Seq_v2_expression_median.txt", sep="\t",index_col=0)
+tcga_exp_l =  tcga_exp_l.drop(columns="Entrez_Gene_Id")
+tcga_exp_l.columns =  [i[:-3] for i in tcga_exp_l.columns]
+tcga_exp_l = np.log2(tcga_exp_l+1) #log2transform
+
+for gene in ["ETV5", "DUSP4","EPHA4"]:
+
+    #make one df that maps sample category to for stripplot + check theres no overlap
+    BRAF_RNF43_exp_df = pd.DataFrame(index=score_mut.index)
+    BRAF_RNF43_exp_df["RNF43_WT_BRAF_WT"]=tcga_exp_l[RNF43_WT_BRAF_WT.index].loc[gene]
+    BRAF_RNF43_exp_df["RNF43_WT_BRAF_MISS"]=tcga_exp_l[RNF43_WT_BRAF_MISS.index].loc[gene]
+    BRAF_RNF43_exp_df["RNF43_TRUNC_BRAF_WT"]=tcga_exp_l[RNF43_TRUNC_BRAF_WT.index].loc[gene]
+    BRAF_RNF43_exp_df["RNF43_TRUNC_BRAF_MISS"]=tcga_exp_l[RNF43_TRUNC_BRAF_MISS.index].loc[gene]
+    # BRAF_RNF43_exp_df["RNF43_G659fs_BRAF_MISS"]=tcga_exp_l[ list(set(RNF43_TRUNC_BRAF_MISS.index) & set(RNF43_G659fs_samples_contains)) ].loc[gene]
+
+    #no samples with less than 2 nan (no overlap in groups)
+    # print(BRAF_RNF43_exp_df[BRAF_RNF43_exp_df.isnull().sum(axis=1)<2])
+
+    plt.figure(figsize=(6,3))
+    ax = plt.subplot(111)
+    ax = sns.boxplot(data=BRAF_RNF43_exp_df , palette="Blues", showfliers=False)
+    test_results = add_stat_annotation(ax, data=BRAF_RNF43_exp_df,box_pairs=
+                                    [("RNF43_WT_BRAF_WT", "RNF43_WT_BRAF_MISS"),
+                                    ("RNF43_WT_BRAF_WT","RNF43_TRUNC_BRAF_WT"),
+                                    ("RNF43_WT_BRAF_WT", "RNF43_TRUNC_BRAF_MISS"),
+                                    ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_WT"),
+                                    ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_MISS")
+                                    ("RNF43_TRUNC_BRAF_WT", "RNF43_TRUNC_BRAF_MISS")],
+                                       test='Mann-Whitney', text_format='star',
+                                       loc='outside', verbose=2)
+    ax = sns.stripplot(data=BRAF_RNF43_exp_df, color="black", alpha= 0.2, s=7, jitter=.05)
+    ax.set_xticklabels( ('RNF43 WT\nBRAF WT', 'RNF43 WT\nBRAF MISS','RNF43 TRUNC\nBRAF WT','RNF43 TRUNC\nBRAF MISS') )
+
+    # plt.xticks(rotation=30)
+    plt.xlabel('', fontsize=18)
+    plt.ylabel(gene, fontsize=16)
+    plt.savefig("outputs/boxplot_scores_RNF43_BRAF_status_"+gene+".png",dpi=300,bbox_inches="tight")
+    # plt.savefig("outputs/boxplot_scores_RNF43_BRAF_status_ETV5.svg",dpi=300,bbox_inches="tight")
