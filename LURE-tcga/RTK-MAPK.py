@@ -7,10 +7,15 @@ import numpy as  np
 from scipy import stats
 from statannot import add_stat_annotation
 
-
+"""
+This script looks at the MAPK/RAS/RTK driver events that occur in  TCGA COAD
+and how they co-occur with RNF43 and BRAF events. Also makes boxplots expression for
+DUSP4, ETV5, and EPHA5 across RNF43/BRAF status with
+"""
 
 #cbpioportal RSEM
-tcga_exp = pd.read_csv("inputs/cbioportal_data_RNA_Seq_v2_expression_median.txt", sep="\t",index_col=0)
+tcga_exp = pd.read_csv("inputs/cbioportal_data_RNA_Seq_v2_expression_median.txt",
+                        sep="\t",index_col=0)
 tcga_exp =  tcga_exp.drop(columns="Entrez_Gene_Id")
 tcga_exp.columns =  [i[:-3] for i in tcga_exp.columns]
 tcga_exp = np.log2(tcga_exp+1) #log2transform
@@ -24,8 +29,9 @@ tcga_exp = pd.DataFrame(tcga_exp_,
 #BRAF-scores and RNF43 mutants generated from LURE lolli script
 score_mut = pd.read_csv("outputs/LUREscore_mut_status.csv", index_col=0)
 
-RNF43_G659fs_samples_contains = score_mut[score_mut["RNF43"].str.contains("G659fs", na=False)]["RNF43"].index.tolist()
-RNF43_G659fs_samples_only = score_mut[score_mut["RNF43"] == "['G659fs']" ]["RNF43"].index.tolist()
+RNF43_G659fs_samples_contains = score_mut[score_mut["RNF43"].str.contains(
+                                    "G659fs", na=False)]["RNF43"].index.tolist()
+RNF43_G659fs_samples_only = score_mut[score_mut["RNF43"] == "['G659fs']"]["RNF43"].index.tolist()
 
 #adding driver status of all mapk/rtk genes
 mapk_driver_status = pd.read_csv("inputs/cbioportal-MAPK-RTK-genes-driver-sample-matrix.txt",
@@ -40,50 +46,89 @@ score_mut = score_mut.merge(mapk_driver_status, how='outer', left_index=True, ri
 score_mut = score_mut.drop(columns=["Altered","x"])
 
 
-RNF43_WT_BRAF_WT = score_mut[ (score_mut["RNF43_TRUNCATING"] != "TRUNCATING")
-            & (score_mut["BRAF_MISSENSE"] != "MISSENSE") ].drop(columns=["RNF43_TRUNCATING","BRAF_MISSENSE"])
+##########################################
+# Group by RNF43 and BRAF status
+#########################################
 
+#RNF43 WT & BRAF WT
+RNF43_WT_BRAF_WT = score_mut[ (score_mut["RNF43_TRUNCATING"] != "TRUNCATING")
+            & (score_mut["BRAF_MISSENSE"] != "MISSENSE") ].drop(
+                                    columns=["RNF43_TRUNCATING","BRAF_MISSENSE"])
 print("RNF43_WT_BRAF_WT")
-# print(RNF43_WT_BRAF_WT.loc[:,RNF43_WT_BRAF_WT.sum() !=0].sum().sort_values(ascending=False))
 print("total samples:",RNF43_WT_BRAF_WT.shape[0])
-print(RNF43_WT_BRAF_WT.loc[:,RNF43_WT_BRAF_WT.sum() !=0].sum().sort_values(ascending=False)/RNF43_WT_BRAF_WT.shape[0])
-print(RNF43_WT_BRAF_WT.loc[RNF43_WT_BRAF_WT.sum(axis=1)<1])
+print(RNF43_WT_BRAF_WT.loc[:,RNF43_WT_BRAF_WT.sum() !=0].sum().sort_values(
+                                    ascending=False)/RNF43_WT_BRAF_WT.shape[0])
+# print(RNF43_WT_BRAF_WT.loc[RNF43_WT_BRAF_WT.sum(axis=1)<1])
+RNF43_WT_BRAF_WT_avg = (RNF43_WT_BRAF_WT.sum().sort_values(
+                            ascending=False)/RNF43_WT_BRAF_WT.shape[0]
+                            ).to_frame().rename(columns = {0:"RNF43_WT_BRAF_WT"})
+
 
 #RNF43 WT & BRAF Missense
 RNF43_WT_BRAF_MISS = score_mut[ (score_mut["RNF43_TRUNCATING"] != "TRUNCATING")
-            & (score_mut["BRAF_MISSENSE"] == "MISSENSE")].drop(columns=["RNF43_TRUNCATING","BRAF_MISSENSE"])
-
+            & (score_mut["BRAF_MISSENSE"] == "MISSENSE")].drop(
+                                    columns=["RNF43_TRUNCATING","BRAF_MISSENSE"])
 print("RNF43_WT_BRAF_MISS")
-# print(RNF43_WT_BRAF_MISS.loc[:,RNF43_WT_BRAF_MISS.sum() !=0].sum().sort_values(ascending=False))
 print("total samples:",RNF43_WT_BRAF_MISS.shape[0])
-print(RNF43_WT_BRAF_MISS.loc[:,RNF43_WT_BRAF_MISS.sum() !=0].sum().sort_values(ascending=False)/RNF43_WT_BRAF_MISS.shape[0])
-print(RNF43_WT_BRAF_MISS.loc[RNF43_WT_BRAF_MISS.sum(axis=1)<1])
-
+print(RNF43_WT_BRAF_MISS.loc[:,RNF43_WT_BRAF_MISS.sum() !=0].sum().sort_values(
+                            ascending=False)/RNF43_WT_BRAF_MISS.shape[0])
+# print(RNF43_WT_BRAF_MISS.loc[RNF43_WT_BRAF_MISS.sum(axis=1)<1])
+RNF43_WT_BRAF_MISS_avg = (RNF43_WT_BRAF_MISS.sum().sort_values(
+                        ascending=False)/RNF43_WT_BRAF_MISS.shape[0]
+                        ).to_frame().rename(columns = {0:"RNF43_WT_BRAF_MISS"})
 
 # RNF43 TRUNC & BRAF WT
 RNF43_TRUNC_BRAF_WT = score_mut[ (score_mut["RNF43_TRUNCATING"]== "TRUNCATING")
-            & (score_mut["BRAF_MISSENSE"] != "MISSENSE")].drop(columns=["RNF43_TRUNCATING","BRAF_MISSENSE"])
-
+            & (score_mut["BRAF_MISSENSE"] != "MISSENSE")].drop(
+                                    columns=["RNF43_TRUNCATING","BRAF_MISSENSE"])
 print("RNF43_TRUNC_BRAF_WT")
-# print(RNF43_TRUNC_BRAF_WT.loc[:,RNF43_TRUNC_BRAF_WT.sum() !=0].sum().sort_values(ascending=False))
 print("total samples:",RNF43_TRUNC_BRAF_WT.shape[0])
-print(RNF43_TRUNC_BRAF_WT.loc[:,RNF43_TRUNC_BRAF_WT.sum() !=0].sum().sort_values(ascending=False)/RNF43_TRUNC_BRAF_WT.shape[0])
-print(RNF43_TRUNC_BRAF_WT.loc[RNF43_TRUNC_BRAF_WT.sum(axis=1)<1])
+print(RNF43_TRUNC_BRAF_WT.loc[:,RNF43_TRUNC_BRAF_WT.sum() !=0].sum().sort_values(
+                                ascending=False)/RNF43_TRUNC_BRAF_WT.shape[0])
+# print(RNF43_TRUNC_BRAF_WT.loc[RNF43_TRUNC_BRAF_WT.sum(axis=1)<1])
+RNF43_TRUNC_BRAF_WT_avg = (RNF43_TRUNC_BRAF_WT.sum().sort_values(
+                        ascending=False)/RNF43_TRUNC_BRAF_WT.shape[0]
+                        ).to_frame().rename(columns = {0:"RNF43_TRUNC_BRAF_WT"})
+
 
 # RNF43 TRUNC & BRAF MISSENSE
 RNF43_TRUNC_BRAF_MISS = score_mut[(score_mut["RNF43_TRUNCATING"]== "TRUNCATING")
-            & (score_mut["BRAF_MISSENSE"] == "MISSENSE")].drop(columns=["RNF43_TRUNCATING","BRAF_MISSENSE"])
-
+                            & (score_mut["BRAF_MISSENSE"] == "MISSENSE")].drop(
+                                    columns=["RNF43_TRUNCATING","BRAF_MISSENSE"])
 print("RNF43_TRUNC_BRAF_MISS")
-# print(RNF43_TRUNC_BRAF_MISS.loc[:,RNF43_TRUNC_BRAF_MISS.sum() !=0].sum().sort_values(ascending=False))
 print("total samples:",RNF43_TRUNC_BRAF_MISS.shape[0])
-print(RNF43_TRUNC_BRAF_MISS.loc[:,RNF43_TRUNC_BRAF_MISS.sum() !=0].sum().sort_values(ascending=False)/RNF43_TRUNC_BRAF_MISS.shape[0])
-print(RNF43_TRUNC_BRAF_MISS.loc[RNF43_TRUNC_BRAF_MISS.sum(axis=1)<1])
+print(RNF43_TRUNC_BRAF_MISS.loc[:,RNF43_TRUNC_BRAF_MISS.sum() !=0].sum().sort_values(
+                                    ascending=False)/RNF43_TRUNC_BRAF_MISS.shape[0])
+# print(RNF43_TRUNC_BRAF_MISS.loc[RNF43_TRUNC_BRAF_MISS.sum(axis=1)<1])
+RNF43_TRUNC_BRAF_MISS_avg = (RNF43_TRUNC_BRAF_MISS.sum().sort_values(
+                            ascending=False)/RNF43_TRUNC_BRAF_MISS.shape[0]
+                            ).to_frame().rename(columns = {0:"RNF43_TRUNC_BRAF_MISS"})
 
+
+##########################################
+# MAPK gene driver event barplot
+###########################################
+
+#combine 4 groups into one df and make bar plot
+merged_RNF43_BRAF = pd.concat([RNF43_WT_BRAF_WT_avg,RNF43_WT_BRAF_MISS_avg,
+                    RNF43_TRUNC_BRAF_WT_avg,RNF43_TRUNC_BRAF_MISS_avg], axis=1)
+#remove genes that have 0 counts in all conditions
+merged_RNF43_BRAF = merged_RNF43_BRAF[(merged_RNF43_BRAF.T != 0).any()]
+merged_RNF43_BRAF.plot.bar(rot=0 )
+
+plt.ylabel("Percent of samples containing a driver event in the gene")
+plt.xticks(rotation=90)
+plt.savefig("outputs/MAPK_gene_events.png",bbox_inches = "tight",dpi=400)
+plt.clf()
+plt.close()
 
 
 """
-for i in [(RNF43_WT_BRAF_WT,"RNF43_WT_BRAF_WT"),(RNF43_WT_BRAF_MISS,"RNF43_WT_BRAF_MISS"),(RNF43_TRUNC_BRAF_WT,"RNF43_TRUNC_BRAF_WT"),(RNF43_TRUNC_BRAF_MISS,"RNF43_TRUNC_BRAF_MISS")]:
+##########################################
+# plot event overlap on clustermap
+###########################################
+for i in [(RNF43_WT_BRAF_WT,"RNF43_WT_BRAF_WT"),(RNF43_WT_BRAF_MISS,"RNF43_WT_BRAF_MISS"),
+(RNF43_TRUNC_BRAF_WT,"RNF43_TRUNC_BRAF_WT"),(RNF43_TRUNC_BRAF_MISS,"RNF43_TRUNC_BRAF_MISS")]:
     df =  i[0].loc[(i[0].sum(axis=1) != 0),
                             (i[0].sum(axis=0) != 0)]
 
@@ -100,9 +145,11 @@ print(len(set(genes_1)))
 #get order of mut frequency and remove genes with no driver events
 score_mut_  = score_mut.drop(columns=["RNF43_TRUNCATING","BRAF_MISSENSE"])
 mut_genes_by_freq = score_mut_.loc[(score_mut_.sum(axis=1) != 0),
-                        (score_mut_.sum(axis=0) != 0)].sum().sort_values(ascending=False).index.tolist()
+                        (score_mut_.sum(axis=0) != 0)].sum().sort_values(
+                        ascending=False).index.tolist()
 
-score_mut = score_mut.loc[:,score_mut.columns.isin(mut_genes_by_freq+["RNF43_TRUNCATING","BRAF_MISSENSE"])]
+score_mut = score_mut.loc[:,score_mut.columns.isin(
+                    mut_genes_by_freq+["RNF43_TRUNCATING","BRAF_MISSENSE"])]
 tcga_exp.append(score_mut.transpose())
 #make order match
 tcga_exp = tcga_exp[score_mut.index]
@@ -116,11 +163,9 @@ for i in score_mut["RNF43_TRUNCATING"].tolist():
         RNF43_c.append("white")
 
 
-#make color lists for each
+#make color lists for each genes
 l = []
-
-l.append(RNF43_c)
-
+l.append(RNF43_c) #make sure RNF43 is at top
 for i in  mut_genes_by_freq:
     this = []
     for j in score_mut[i].tolist():
@@ -130,28 +175,37 @@ for i in  mut_genes_by_freq:
             this.append("black")
         else:
             this.append("red")
-
     l.append(this)
-
 
 hypoxia_genes = ["HIF1A"]
 emt_genes = ["TWIST1","SNAI1"]
 nfkb_genes = ["NFKB1","NFKB2","RELB"]
 #https://www.nature.com/articles/s41698-018-0051-4 "MAPK Pathway Activity Score
-mapkgenes = "PHLDA1, SPRY2, SPRY4, ETV4, ETV5, DUSP4, DUSP6, CCND1, EPHA2,  EPHA4".replace(',','').split()
+mapkgenes = "PHLDA1, SPRY2, SPRY4, ETV4, ETV5, DUSP4, DUSP6, CCND1, \
+        EPHA2,  EPHA4".replace(',','').split()
 wnt = ["AXIN2", "NKD1", "RNF43", "ZNRF3","WIF1"]
 mmr = ["MLH1"]
 tcga_exp = tcga_exp[tcga_exp.index.isin(mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+emt_genes)]
 
+
 """
-#full map
-sns.clustermap(tcga_exp,col_colors=l,colors_ratio = .02,figsize = (12,8),xticklabels=False,cmap="bwr",
-    method = "ward")
+##########################################
+# full clustermap
+###########################################
+
+sns.clustermap(tcga_exp,col_colors=l,colors_ratio = .02,figsize = (12,8),
+                            xticklabels=False,cmap="bwr",
+                            method = "ward")
 plt.savefig("outputs/testt.png",bbox_inches = "tight",dpi=400)
 plt.clf()
 plt.close()
 """
+
+
 """
+##########################################
+# clustermap for each group
+###########################################
 for i in [(RNF43_WT_BRAF_WT.index.tolist(),"RNF43_WT_BRAF_WT"),
     (RNF43_WT_BRAF_MISS.index.tolist(),"RNF43_WT_BRAF_MISS"),
     (RNF43_TRUNC_BRAF_WT.index.tolist(),"RNF43_TRUNC_BRAF_WT"),
@@ -205,25 +259,24 @@ for i in [(RNF43_WT_BRAF_WT.index.tolist(),"RNF43_WT_BRAF_WT"),
     plt.close()
 """
 
+
 ###################################
-#  Boxplot
+#  Expression Boxplot
 ###################################
 #get expression values from 4 groups
-
-tcga_exp_l = pd.read_csv("inputs/cbioportal_data_RNA_Seq_v2_expression_median.txt", sep="\t",index_col=0)
+tcga_exp_l = pd.read_csv("inputs/cbioportal_data_RNA_Seq_v2_expression_median.txt",
+                            sep="\t",index_col=0)
 tcga_exp_l =  tcga_exp_l.drop(columns="Entrez_Gene_Id")
 tcga_exp_l.columns =  [i[:-3] for i in tcga_exp_l.columns]
 tcga_exp_l = np.log2(tcga_exp_l+1) #log2transform
 
 for gene in ["ETV5", "DUSP4","EPHA4"]:
-
     #make one df that maps sample category to for stripplot + check theres no overlap
     BRAF_RNF43_exp_df = pd.DataFrame(index=score_mut.index)
     BRAF_RNF43_exp_df["RNF43_WT_BRAF_WT"]=tcga_exp_l[RNF43_WT_BRAF_WT.index].loc[gene]
     BRAF_RNF43_exp_df["RNF43_WT_BRAF_MISS"]=tcga_exp_l[RNF43_WT_BRAF_MISS.index].loc[gene]
     BRAF_RNF43_exp_df["RNF43_TRUNC_BRAF_WT"]=tcga_exp_l[RNF43_TRUNC_BRAF_WT.index].loc[gene]
     BRAF_RNF43_exp_df["RNF43_TRUNC_BRAF_MISS"]=tcga_exp_l[RNF43_TRUNC_BRAF_MISS.index].loc[gene]
-    # BRAF_RNF43_exp_df["RNF43_G659fs_BRAF_MISS"]=tcga_exp_l[ list(set(RNF43_TRUNC_BRAF_MISS.index) & set(RNF43_G659fs_samples_contains)) ].loc[gene]
 
     #no samples with less than 2 nan (no overlap in groups)
     # print(BRAF_RNF43_exp_df[BRAF_RNF43_exp_df.isnull().sum(axis=1)<2])
@@ -236,12 +289,13 @@ for gene in ["ETV5", "DUSP4","EPHA4"]:
                                     ("RNF43_WT_BRAF_WT","RNF43_TRUNC_BRAF_WT"),
                                     ("RNF43_WT_BRAF_WT", "RNF43_TRUNC_BRAF_MISS"),
                                     ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_WT"),
-                                    ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_MISS")
+                                    ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_MISS"),
                                     ("RNF43_TRUNC_BRAF_WT", "RNF43_TRUNC_BRAF_MISS")],
-                                       test='Mann-Whitney', text_format='star',
+                                       test='Kruskal', text_format='star',
                                        loc='outside', verbose=2)
     ax = sns.stripplot(data=BRAF_RNF43_exp_df, color="black", alpha= 0.2, s=7, jitter=.05)
-    ax.set_xticklabels( ('RNF43 WT\nBRAF WT', 'RNF43 WT\nBRAF MISS','RNF43 TRUNC\nBRAF WT','RNF43 TRUNC\nBRAF MISS') )
+    ax.set_xticklabels( ('RNF43 WT\nBRAF WT', 'RNF43 WT\nBRAF MISS',
+                            'RNF43 TRUNC\nBRAF WT','RNF43 TRUNC\nBRAF MISS') )
 
     # plt.xticks(rotation=30)
     plt.xlabel('', fontsize=18)
