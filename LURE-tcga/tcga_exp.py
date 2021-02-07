@@ -246,7 +246,7 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
                 col_colors=[lure_scale_c,braf_status_c,rnf43_status_c,
                             RNF43_mut_type_c,mapk_pway_driver_status_c,
                             kras_status_c,msi_status_c],
-                row_cluster=True,vmin=-5, vmax=5)
+                row_cluster=True,vmin=-5, vmax=5,cbar_pos=None)
 
     plt.tight_layout()
     plt.savefig("outputs/clustermaps/tcga_heatmap_"+label+".png",
