@@ -9,19 +9,30 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from scipy import stats
 
+"""
+This script clusters TCGA COAD expression data
+"""
 
 def main():
     #BRAF-scores and RNF43 mutants generated from LURE lolli script
     score_mut = pd.read_csv("outputs/LUREscore_mut_status.csv", index_col=0)
 
     #Xena - gene-level transcription estimates, as in log2(x+1) transformed RSEM normalized count
-    tcga_exp_coadread = pd.read_csv("inputs/XenaCOADREAD_HiSeqV2", sep="\t",index_col=0)
+    # tcga_exp_coadread = pd.read_csv("inputs/XenaCOADREAD_HiSeqV2", sep="\t",index_col=0)
+
+    #cbpioportal RSEM
+    tcga_exp_coadread = pd.read_csv("inputs/cbioportal_data_RNA_Seq_v2_expression_median.txt",
+                                        sep="\t",index_col=0)
+    tcga_exp_coadread =  tcga_exp_coadread.drop(columns="Entrez_Gene_Id")
     tcga_exp_coadread.columns =  [i[:-3] for i in tcga_exp_coadread.columns]
+    tcga_exp_coadread = np.log2(tcga_exp_coadread+1) #log2transform
 
     #add kras status to mut df
-    kras_mut =  pd.read_csv("inputs/cbioportal_KRAS_TCGA_COAD_mutations.txt", sep="\t",index_col  = "SAMPLE_ID")
+    kras_mut =  pd.read_csv("inputs/cbioportal_KRAS_TCGA_COAD_mutations.txt",
+                                        sep="\t",index_col  = "SAMPLE_ID")
     kras_mut.index =  [i[:-3] for i in kras_mut.index]
-    score_mut = score_mut.merge(kras_mut["KRAS"], how='outer', left_index=True, right_index=True)
+    score_mut = score_mut.merge(kras_mut["KRAS"], how='outer',
+                                            left_index=True, right_index=True)
     score_mut = score_mut[score_mut['x'].notna()]
 
 
@@ -40,34 +51,33 @@ def main():
     emt_genes = ["TWIST1","SNAI1"]
     nfkb_genes = ["NFKB1","NFKB2","RELB"]
     #https://www.nature.com/articles/s41698-018-0051-4 "MAPK Pathway Activity Score
-    mapkgenes = "PHLDA1, SPRY2, SPRY4, ETV4, ETV5, DUSP4, DUSP6, CCND1, EPHA2,  EPHA4".replace(',','').split()
+    mapkgenes = "PHLDA1, SPRY2, SPRY4, ETV4, ETV5, DUSP4, DUSP6, CCND1,\
+                            EPHA2, EPHA4".replace(',','').split()
     wnt = ["AXIN2", "NKD1", "RNF43", "ZNRF3","WIF1"]
     mmr = ["MLH1"]
 
-    clustermap(score_mut,tcga_exp_coadread,mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+emt_genes,"full" )
+    clustermap(score_mut,tcga_exp_coadread,mapkgenes+wnt+mmr+hypoxia_genes+
+                                                nfkb_genes+emt_genes,"full" )
 
     ############################################
     #plot only WT BRAF and RNF43 TRUNC samples
 
-    score_mut_BRAFWT_RNF43_trunc = score_mut[(score_mut["BRAF_MISSENSE"].isna()) & (~score_mut["RNF43"].isna())]
-    clustermap(score_mut_BRAFWT_RNF43_trunc,tcga_exp_coadread,mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+emt_genes,"_BRAFWT_RNF43_TRUNC" )
-    clustermap(score_mut_BRAFWT_RNF43_trunc,tcga_exp_coadread,mapkgenes,"_BRAFWT_RNF43_TRUNC_mapk" )
+    score_mut_BRAFWT_RNF43_trunc = score_mut[(score_mut["BRAF_MISSENSE"].isna())
+                                                & (~score_mut["RNF43"].isna())]
+    clustermap(score_mut_BRAFWT_RNF43_trunc,tcga_exp_coadread,mapkgenes+wnt+
+                mmr+hypoxia_genes+nfkb_genes+emt_genes,"_BRAFWT_RNF43_TRUNC" )
+    clustermap(score_mut_BRAFWT_RNF43_trunc,tcga_exp_coadread,
+                mapkgenes,"_BRAFWT_RNF43_TRUNC_mapk" )
 
     ############################################
     #plot only WT BRAF and only RNF43 G659fs samples (no other RNF43 TRUNC variants either)
 
-    score_mut_BRAFWT_RNF43_659 = score_mut[(score_mut["BRAF_MISSENSE"].isna()) & (score_mut["RNF43"] == "['G659fs']")]
-    clustermap(score_mut_BRAFWT_RNF43_659,tcga_exp_coadread,mapkgenes,"_BRAFWT_RNF43_G659fs_mapk" )
-    clustermap(score_mut_BRAFWT_RNF43_659,tcga_exp_coadread,mapkgenes+wnt+mmr+hypoxia_genes+nfkb_genes+emt_genes,"_BRAFWT_RNF43_G659fs" )
-
-
-    # ############################################
-    # # which RTK/RAS/MAPK/ events occur in RNF43
-    # #adding driver status of all mapk/rtk genes
-    # mapk_driver_status = pd.read_csv("inputs/cbioportal-MAPK-RTK-genes-driver-sample-matrix.txt",
-    #                 sep="\t", index_col = 0)
-    #
-    # print(mapk_driver_status)
+    score_mut_BRAFWT_RNF43_659 = score_mut[(score_mut["BRAF_MISSENSE"].isna()) &
+                                (score_mut["RNF43"] == "['G659fs']")]
+    clustermap(score_mut_BRAFWT_RNF43_659,tcga_exp_coadread,mapkgenes,
+                "_BRAFWT_RNF43_G659fs_mapk" )
+    clustermap(score_mut_BRAFWT_RNF43_659,tcga_exp_coadread,mapkgenes+wnt+mmr+
+                    hypoxia_genes+nfkb_genes+emt_genes,"_BRAFWT_RNF43_G659fs" )
 
 
 def clustermap(score_mut,tcga_exp, gene_list,  label ):
@@ -82,10 +92,12 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     #find tcga samples in both df
     samples = [i for i in tcga_exp.columns if i in score_mut.index ]
     tcga_exp = tcga_exp[samples]
-    score_mut = score_mut[score_mut.index.isin(samples)][["RNF43_TRUNCATING","BRAF_MISSENSE","x","RNF43","KRAS"]]
+    score_mut = score_mut[score_mut.index.isin(samples)][["RNF43_TRUNCATING",
+                    "BRAF_MISSENSE","x","RNF43","KRAS"]]
     #rename RNF43 and KRAS so its not confused with gene expression row
     score_mut = score_mut.rename(columns={"RNF43": "RNF43_muts","KRAS":"KRAS_muts"})
-    tcga_exp = tcga_exp.append(score_mut[["RNF43_TRUNCATING","BRAF_MISSENSE","x","RNF43_muts","KRAS_muts"]].transpose())
+    tcga_exp = tcga_exp.append(score_mut[["RNF43_TRUNCATING","BRAF_MISSENSE",
+                    "x","RNF43_muts","KRAS_muts"]].transpose())
 
     #import clinical data
     xenaclinical = pd.read_csv("inputs/COADREAD_clinicalMatrix", sep="\t",
@@ -174,7 +186,8 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     #adding scale for LURE classifier score
     norm = matplotlib.colors.Normalize(vmin=0, vmax=1, clip=True)
     mapper = plt.cm.ScalarMappable(norm=norm, cmap=plt.cm.YlGn)
-    tcga_exp.loc['x_color'] = tcga_exp.loc['x'].apply(lambda x: mcolors.to_hex(mapper.to_rgba(x)))
+    tcga_exp.loc['x_color'] = tcga_exp.loc['x'].apply(
+                            lambda x: mcolors.to_hex(mapper.to_rgba(x)))
     lure_scale_c = tcga_exp.loc['x_color'].tolist()
 
     """
@@ -182,7 +195,8 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     clinical = pd.read_csv("inputs/coadread_tcga_clinical_data.tsv", sep="\t",
                             index_col = "Patient ID")
 
-    left = ['Splenic Flexure','Descending Colon','Sigmoid Colon','Rectosigmoid Junction','Rectum']
+    left = ['Splenic Flexure','Descending Colon','Sigmoid Colon',
+                        'Rectosigmoid Junction','Rectum']
     right = ['Cecum','Ascending Colon','Hepatic Flexure','Transverse Colon']
 
     left_samples = clinical[clinical["Patient Primary Tumor Site"].isin(left)].index.tolist()
@@ -226,22 +240,19 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     ################
     # clustermap
     ################
-    # sns.clustermap(tcga_exp,z_score=0,center=0,cmap="bwr",xticklabels=False,
-    #             yticklabels=True,row_colors=gene_colors, method = "ward",
-    #             colors_ratio = .03, figsize = (12,8),
-    #             col_colors=[lure_scale_c,braf_status_c,rnf43_status_c,RNF43_mut_type_c,mapk_pway_driver_status_c,kras_status_c,msi_status_c],
-    #             row_cluster=True)
-
     sns.clustermap(tcga_exp,center=0,cmap="bwr",xticklabels=False,
                 yticklabels=True,row_colors=gene_colors, method = "ward",
                 colors_ratio = .03, figsize = (12,8),
-                col_colors=[lure_scale_c,braf_status_c,rnf43_status_c,RNF43_mut_type_c,mapk_pway_driver_status_c,kras_status_c,msi_status_c],
-                row_cluster=True)
-
+                col_colors=[lure_scale_c,braf_status_c,rnf43_status_c,
+                            RNF43_mut_type_c,mapk_pway_driver_status_c,
+                            kras_status_c,msi_status_c],
+                row_cluster=True,vmin=-5, vmax=5)
 
     plt.tight_layout()
-    plt.savefig("outputs/clustermaps/tcga_heatmap_"+label+".png",bbox_inches = "tight",dpi=400)
-    plt.savefig("outputs/clustermaps/tcga_heatmap_"+label+".svg",bbox_inches = "tight",dpi=400)
+    plt.savefig("outputs/clustermaps/tcga_heatmap_"+label+".png",
+                bbox_inches = "tight",dpi=400)
+    plt.savefig("outputs/clustermaps/tcga_heatmap_"+label+".svg",
+                bbox_inches = "tight",dpi=400)
 
     plt.clf()
     plt.close()
@@ -257,9 +268,12 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     emt_patch = mpatches.Patch(color='slateblue', label='EMT')
     wnt_patch = mpatches.Patch(color='cornflowerblue', label='WNT')
     mmr_patch = mpatches.Patch(color='plum', label='MMR')
-    plt.legend(handles=[mapk_patch,nfkb_patch,hypoxia_patch,wnt_patch,emt_patch, mmr_patch],loc='upper center')
-    plt.savefig("outputs/clustermaps/tcga_heatmap_legend1.svg",bbox_inches = "tight",dpi=400)
-    plt.savefig("outputs/clustermaps/tcga_heatmap_legend1.png",bbox_inches = "tight",dpi=400)
+    plt.legend(handles=[mapk_patch,nfkb_patch,hypoxia_patch,wnt_patch,emt_patch,
+                mmr_patch],loc='upper center')
+    plt.savefig("outputs/clustermaps/tcga_heatmap_legend1.svg",
+                bbox_inches = "tight",dpi=400)
+    plt.savefig("outputs/clustermaps/tcga_heatmap_legend1.png"
+                ,bbox_inches = "tight",dpi=400)
     plt.clf()
     plt.close()
 
@@ -283,6 +297,7 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     plt.savefig("outputs/clustermaps/tcga_heatmap_legend2.svg",bbox_inches = "tight",dpi=400)
     plt.clf()
     plt.close()
+
 
 
 if __name__ == "__main__":

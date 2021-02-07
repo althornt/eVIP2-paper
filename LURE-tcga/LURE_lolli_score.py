@@ -10,6 +10,11 @@ from lifelines import KaplanMeierFitter
 from lifelines.statistics import logrank_test
 from statannot import add_stat_annotation
 
+"""
+This script plots LURE scores across RNF43 and BRAF status groups
+and makes lollipop plots of RNF43 events identified with LURE
+"""
+
 
 def main():
     lure = pd.read_csv("outputs/giannakis_updated_LURE_matrix.csv",
@@ -46,14 +51,18 @@ def main():
         row["RNF43"] = keep
 
     # giannakis RNF43 calls
-    giannakis = pd.read_csv("inputs/Giannakis-TCGA-COAD-RNF43.txt", sep="\t",index_col = "Tumor_Sample_Barcode")
+    giannakis = pd.read_csv("inputs/Giannakis-TCGA-COAD-RNF43.txt", sep="\t",
+                        index_col = "Tumor_Sample_Barcode")
     giannakis.index = [i[-12:] for i in giannakis.index]
     # giannakis.index = [i.replace("-",".") for i in giannakis.index]
-    giannakis_fs = giannakis[(giannakis["Protein_Change"].str.contains("fs")) | (giannakis["Protein_Change"].str.endswith("*"))]
-    giannakis_fs["Protein_Change"] = [str(x).replace('p.','') for x in giannakis_fs["Protein_Change"]]
+    giannakis_fs = giannakis[(giannakis["Protein_Change"].str.contains("fs")) |
+                    (giannakis["Protein_Change"].str.endswith("*"))]
+    giannakis_fs["Protein_Change"] = [str(x).replace('p.','')
+                                    for x in giannakis_fs["Protein_Change"]]
 
     #combine calls from each sample
-    giannakis_fs_gp = giannakis_fs['Protein_Change'].groupby(giannakis_fs.index).apply(list).to_frame()
+    giannakis_fs_gp = giannakis_fs['Protein_Change'].groupby(
+                            giannakis_fs.index).apply(list).to_frame()
 
     #combine cbioportal and giannakis df
     cbio_giannakis = cbioportal.join(giannakis_fs_gp["Protein_Change"], how='outer')
@@ -98,53 +107,69 @@ def main():
     print(" ------------- scores in RNF43 events without BRAF:")
 
     #get samples that with RNF43 events but not BRAF events
-    score_mut_RNF43_noBRAF =score_mut[(score_mut["RNF43_TRUNCATING"]=="TRUNCATING") & (score_mut["BRAF_MISSENSE"]!="MISSENSE")]
+    score_mut_RNF43_noBRAF =score_mut[(score_mut["RNF43_TRUNCATING"]=="TRUNCATING") &
+                            (score_mut["BRAF_MISSENSE"]!="MISSENSE")]
     # score_mut =score_mut[(score_mut["RNF43_TRUNCATING"]=="TRUNCATING") ]
 
     print(score_mut_RNF43_noBRAF)
 
     print("\n")
     print("only G659fs")
-    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].str.join(sep=",")=="G659fs"]["x"].shape[0])
-    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].str.join(sep=",")=="G659fs"]["x"].mean())
+    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].str.join(sep=",")
+                                =="G659fs"]["x"].shape[0])
+    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].str.join(sep=",")
+                                =="G659fs"]["x"].mean())
 
     print("\n")
     print("only R117fs")
-    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].str.join(sep=",")=="R117fs"]["x"].shape[0])
-    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].str.join(sep=",")=="R117fs"]["x"].mean())
+    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].str.join(sep=",")
+                                =="R117fs"]["x"].shape[0])
+    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].str.join(sep=",")
+                                =="R117fs"]["x"].mean())
 
     print("\n")
     print("both R117fs and G659fs")
-    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].apply(str).str.contains("R117fs","G659fs")]["x"].shape[0])
-    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].apply(str).str.contains("R117fs","G659fs")]["x"].mean())
+    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].apply(str).
+                                str.contains("R117fs","G659fs")]["x"].shape[0])
+    print(score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].apply(str).
+                                str.contains("R117fs","G659fs")]["x"].mean())
 
     print("\n")
     print("not R117fs or G659fs:")
-    print(score_mut_RNF43_noBRAF[~score_mut_RNF43_noBRAF["RNF43"].apply(str).str.contains("R117fs","G659fs")]["x"].shape[0])
-    print(score_mut_RNF43_noBRAF[~score_mut_RNF43_noBRAF["RNF43"].apply(str).str.contains("R117fs","G659fs")]["x"].mean())
+    print(score_mut_RNF43_noBRAF[~score_mut_RNF43_noBRAF["RNF43"].apply(str).
+                                str.contains("R117fs","G659fs")]["x"].shape[0])
+    print(score_mut_RNF43_noBRAF[~score_mut_RNF43_noBRAF["RNF43"].apply(str).
+                                str.contains("R117fs","G659fs")]["x"].mean())
 
     #############################################
     #  scores in SINGLE - RNF43 events without BRAF
     ############################################
     print("\n")
     print(" ------------- scores in SINGLE - RNF43 events without BRAF:")
-    score_mut_RNF43_noBRAF_unique = score_mut_RNF43_noBRAF[score_mut_RNF43_noBRAF["RNF43"].str.len()==1]
+    score_mut_RNF43_noBRAF_unique = score_mut_RNF43_noBRAF[
+                            score_mut_RNF43_noBRAF["RNF43"].str.len()==1]
     print(score_mut_RNF43_noBRAF_unique)
 
     print("\n")
     print("only G659fs")
-    print(score_mut_RNF43_noBRAF_unique[score_mut_RNF43_noBRAF_unique["RNF43"].str.join(sep=",")=="G659fs"]["x"].shape[0])
-    print(score_mut_RNF43_noBRAF_unique[score_mut_RNF43_noBRAF_unique["RNF43"].str.join(sep=",")=="G659fs"]["x"].mean())
+    print(score_mut_RNF43_noBRAF_unique[score_mut_RNF43_noBRAF_unique["RNF43"].str.
+                            join(sep=",")=="G659fs"]["x"].shape[0])
+    print(score_mut_RNF43_noBRAF_unique[score_mut_RNF43_noBRAF_unique["RNF43"].str.
+                            join(sep=",")=="G659fs"]["x"].mean())
 
     print("\n")
     print("only R117fs")
-    print(score_mut_RNF43_noBRAF_unique[score_mut_RNF43_noBRAF_unique["RNF43"].str.join(sep=",")=="R117fs"]["x"].shape[0])
-    print(score_mut_RNF43_noBRAF_unique[score_mut_RNF43_noBRAF_unique["RNF43"].str.join(sep=",")=="R117fs"]["x"].mean())
+    print(score_mut_RNF43_noBRAF_unique[score_mut_RNF43_noBRAF_unique["RNF43"].str.
+                            join(sep=",")=="R117fs"]["x"].shape[0])
+    print(score_mut_RNF43_noBRAF_unique[score_mut_RNF43_noBRAF_unique["RNF43"].str.
+                            join(sep=",")=="R117fs"]["x"].mean())
 
     print("\n")
     print("not R117fs or G659fs:")
-    print(score_mut_RNF43_noBRAF_unique[~score_mut_RNF43_noBRAF_unique["RNF43"].apply(str).str.contains("R117fs","G659fs")]["x"].shape[0])
-    print(score_mut_RNF43_noBRAF_unique[~score_mut_RNF43_noBRAF_unique["RNF43"].apply(str).str.contains("R117fs","G659fs")]["x"].mean())
+    print(score_mut_RNF43_noBRAF_unique[~score_mut_RNF43_noBRAF_unique["RNF43"].
+                            apply(str).str.contains("R117fs","G659fs")]["x"].shape[0])
+    print(score_mut_RNF43_noBRAF_unique[~score_mut_RNF43_noBRAF_unique["RNF43"].
+                            apply(str).str.contains("R117fs","G659fs")]["x"].mean())
 
 
     ################################################
@@ -167,17 +192,20 @@ def main():
     plt.xlabel('', fontsize=18)
     plt.ylabel('Classifier Score', fontsize=13)
 
-    plt.savefig("outputs/stripplot_lure_score_single_RNF43_noBRAF.png",dpi=300,bbox_inches="tight")
-    plt.savefig("outputs/stripplot_lure_score_single_RNF43_noBRAF.svg",dpi=300,bbox_inches="tight")
+    plt.savefig("outputs/stripplot_lure_score_single_RNF43_noBRAF.png",
+                dpi=300,bbox_inches="tight")
+    plt.savefig("outputs/stripplot_lure_score_single_RNF43_noBRAF.svg",
+                dpi=300,bbox_inches="tight")
 
     plt.clf()
     plt.cla()
 
-    """
+
     ##################################################
     # lollipop for all RNF43 samples LURED (over 0.5)
     ##################################################
-    RNF43_catches = score_mut[(score_mut["x"]>0.5) & (score_mut.index.isin(RNF43_catches))]["RNF43"].tolist()
+    RNF43_catches = score_mut[(score_mut["x"]>0.5) & (score_mut.index.isin(
+                    RNF43_catches))]["RNF43"].tolist()
     #flatten list of all RNF43 mutations in LURED samples
     RNF43_catches_flat =  [item for sublist in RNF43_catches for item in sublist]
 
@@ -188,7 +216,8 @@ def main():
     for key, value in count.items():
          print(key, value)
 
-    cmd = "../Fig1A-RNF43-lollipops/lollipops-v1.5.2-mac64/lollipops  -domain-labels=off  -w=700 -o outputs/lolli_all_sig.svg RNF43 "
+    cmd = "../Fig1A-RNF43-lollipops/lollipops-v1.5.2-mac64/lollipops  \
+    -domain-labels=off  -w=700 -o outputs/lolli_all_sig.svg RNF43 "
 
     #plot only * truncating
     for key, val in count.items():
@@ -201,6 +230,7 @@ def main():
 
     print(cmd)
     os.system(cmd)
+
 
     ##################################################
     # lollipop for all RNF43 samples LURED (all)
@@ -216,7 +246,9 @@ def main():
     for key, value in count.items():
          print(key, value)
 
-    cmd = "../Fig1A-RNF43-lollipops/lollipops-v1.5.2-mac64/lollipops  -domain-labels=off  -w=700 -o outputs/lolli_all.svg RNF43 "
+    """
+    cmd = "../Fig1A-RNF43-lollipops/lollipops-v1.5.2-mac64/lollipops  \
+    -domain-labels=off  -w=700 -o outputs/lolli_all.svg RNF43 "
 
     #plot only * truncating
     for key, val in count.items():
@@ -229,25 +261,29 @@ def main():
 
     print(cmd)
     os.system(cmd)
+    """
+
 
     ############################################################
     # lollipop for RNF43 unique and no BRAF samples (over 0.5)
     #############################################################
     score_mut_RNF43_noBRAF_unique_catches = score_mut[(score_mut["x"]>0.5) &
-                                            (score_mut["RNF43_TRUNCATING"]=="TRUNCATING") &
-                                            (score_mut["BRAF_MISSENSE"]!="MISSENSE") &
-                                            (score_mut["RNF43"].str.len()==1) ]["RNF43"].tolist()
+                        (score_mut["RNF43_TRUNCATING"]=="TRUNCATING") &
+                        (score_mut["BRAF_MISSENSE"]!="MISSENSE") &
+                        (score_mut["RNF43"].str.len()==1) ]["RNF43"].tolist()
 
 
 
-    RNF43_noBRAF_unique_catches_flat =  [item for sublist in score_mut_RNF43_noBRAF_unique_catches for item in sublist]
+    RNF43_noBRAF_unique_catches_flat =  [item for sublist in
+                        score_mut_RNF43_noBRAF_unique_catches for item in sublist]
 
     count  = Counter(RNF43_noBRAF_unique_catches_flat)
 
     for key, value in count.items():
          print(key, value)
 
-    cmd = "../Fig1A-RNF43-lollipops/lollipops-v1.5.2-mac64/lollipops  -domain-labels=off  -w=700 -o outputs/lolli_noBRAF_unique_sig.svg RNF43 "
+    cmd = "../Fig1A-RNF43-lollipops/lollipops-v1.5.2-mac64/lollipops \
+     -domain-labels=off  -w=700 -o outputs/lolli_noBRAF_unique_sig.svg RNF43 "
 
     #plot only * truncating
     for key, val in count.items():
@@ -265,20 +301,22 @@ def main():
     # lollipop for RNF43 unique and no BRAF samples (all)
     #############################################################
     score_mut_RNF43_noBRAF_unique_catches = score_mut[
-                                            (score_mut["RNF43_TRUNCATING"]=="TRUNCATING") &
-                                            (score_mut["BRAF_MISSENSE"]!="MISSENSE") &
-                                            (score_mut["RNF43"].str.len()==1) ]["RNF43"].tolist()
+                        (score_mut["RNF43_TRUNCATING"]=="TRUNCATING") &
+                        (score_mut["BRAF_MISSENSE"]!="MISSENSE") &
+                        (score_mut["RNF43"].str.len()==1) ]["RNF43"].tolist()
 
 
 
-    RNF43_noBRAF_unique_catches_flat =  [item for sublist in score_mut_RNF43_noBRAF_unique_catches for item in sublist]
+    RNF43_noBRAF_unique_catches_flat =  [item for sublist in
+                    score_mut_RNF43_noBRAF_unique_catches for item in sublist]
 
     count  = Counter(RNF43_noBRAF_unique_catches_flat)
 
     for key, value in count.items():
          print(key, value)
 
-    cmd = "../Fig1A-RNF43-lollipops/lollipops-v1.5.2-mac64/lollipops  -domain-labels=off  -w=700 -o outputs/lolli_noBRAF_unique_all.svg RNF43 "
+    cmd = "../Fig1A-RNF43-lollipops/lollipops-v1.5.2-mac64/lollipops  \
+    -domain-labels=off  -w=700 -o outputs/lolli_noBRAF_unique_all.svg RNF43 "
 
     #plot only * truncating
     for key, val in count.items():
@@ -291,7 +329,7 @@ def main():
 
     print(cmd)
     os.system(cmd)
-    """
+
     ###################################################
     # score boxplots of BRAF and RNF43 status
     ###################################################
@@ -325,17 +363,19 @@ def main():
     ax = plt.subplot(111)
     ax = sns.boxplot(data=BRAF_RNF43_score_df , palette="Blues", showfliers=False)
     test_results = add_stat_annotation(ax, data=BRAF_RNF43_score_df,box_pairs=[
-                                                    ("RNF43_WT_BRAF_WT", "RNF43_WT_BRAF_MISS"),
-                                                    ("RNF43_WT_BRAF_WT","RNF43_TRUNC_BRAF_WT"),
-                                                    ("RNF43_WT_BRAF_WT", "RNF43_TRUNC_BRAF_MISS"),
-                                                    ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_WT"),
-                                                    ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_MISS"),
-                                                    ("RNF43_TRUNC_BRAF_WT", "RNF43_TRUNC_BRAF_MISS")],
-                                       test='Kruskal',comparisons_correction=None, text_format='star',
-                                       loc='outside', verbose=2)
+                                ("RNF43_WT_BRAF_WT", "RNF43_WT_BRAF_MISS"),
+                                ("RNF43_WT_BRAF_WT","RNF43_TRUNC_BRAF_WT"),
+                                ("RNF43_WT_BRAF_WT", "RNF43_TRUNC_BRAF_MISS"),
+                                ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_WT"),
+                                ("RNF43_WT_BRAF_MISS","RNF43_TRUNC_BRAF_MISS"),
+                                ("RNF43_TRUNC_BRAF_WT", "RNF43_TRUNC_BRAF_MISS")],
+                               test='Kruskal',comparisons_correction=None,
+                               text_format='star', loc='outside', verbose=2)
 
-    ax = sns.stripplot(data=BRAF_RNF43_score_df, color="black", alpha= 0.2, s=7, jitter=.05)
-    ax.set_xticklabels( ('RNF43 WT\nBRAF WT', 'RNF43 WT\nBRAF MISS','RNF43 TRUNC\nBRAF WT','RNF43 TRUNC\nBRAF MISS') )
+    ax = sns.stripplot(data=BRAF_RNF43_score_df, color="black", alpha= 0.2,
+                        s=7, jitter=.05)
+    ax.set_xticklabels( ('RNF43 WT\nBRAF WT', 'RNF43 WT\nBRAF MISS',
+                        'RNF43 TRUNC\nBRAF WT','RNF43 TRUNC\nBRAF MISS') )
 
 
     plt.axhline(y=0.5, color = "red")
@@ -363,8 +403,12 @@ def main():
     print("number of right samples:", len(right_samples))
 
 
-    # print(score_mut[(score_mut.index.isin(left_samples)) & (score_mut["RNF43_TRUNCATING"] == "TRUNCATING") & (score_mut["BRAF_MISSENSE"] != "MISSENSE")].sort_values(by="x"))
-    # print(score_mut[(score_mut.index.isin(right_samples)) & (score_mut["RNF43_TRUNCATING"] == "TRUNCATING") & (score_mut["BRAF_MISSENSE"] != "MISSENSE")].sort_values(by="x"))
+    # print(score_mut[(score_mut.index.isin(left_samples)) &
+            (score_mut["RNF43_TRUNCATING"] == "TRUNCATING") &
+            (score_mut["BRAF_MISSENSE"] != "MISSENSE")].sort_values(by="x"))
+    # print(score_mut[(score_mut.index.isin(right_samples)) &
+            (score_mut["RNF43_TRUNCATING"] == "TRUNCATING") &
+            (score_mut["BRAF_MISSENSE"] != "MISSENSE")].sort_values(by="x"))
 
 
     #set up df for KM
@@ -380,18 +424,26 @@ def main():
     braf_wt = BRAF_muts[BRAF_muts["BRAF"]=="WT"].index.tolist()
 
 
-    RNF43_WT_BRAF_WT_samples = [i for i in RNF43_WT_BRAF_WT.index.tolist() if i in right_samples and braf_wt]
-    # RNF43_WT_BRAF_WT_samples = [i for i in RNF43_WT_BRAF_WT_samples if i not in high_scores]
+    RNF43_WT_BRAF_WT_samples = [i for i in RNF43_WT_BRAF_WT.index.tolist() if i
+                                in right_samples and braf_wt]
+    # RNF43_WT_BRAF_WT_samples = [i for i in RNF43_WT_BRAF_WT_samples if i
+                                not in high_scores]
 
     print(len(RNF43_WT_BRAF_WT_samples))
-    RNF43_WT_BRAF_MISS_samples =  [i for i in RNF43_WT_BRAF_MISS.index.tolist() if i in right_samples and braf_v600e]
-    # RNF43_WT_BRAF_MISS_samples = [i for i in RNF43_WT_BRAF_MISS_samples if i in high_scores]
+    RNF43_WT_BRAF_MISS_samples =  [i for i in RNF43_WT_BRAF_MISS.index.tolist()
+                            if i in right_samples and braf_v600e]
+    # RNF43_WT_BRAF_MISS_samples = [i for i in RNF43_WT_BRAF_MISS_samples
+                            if i in high_scores]
     print(len(RNF43_WT_BRAF_MISS_samples))
-    RNF43_TRUNC_BRAF_WT_samples = [i for i in RNF43_TRUNC_BRAF_WT.index.tolist() if i in right_samples and braf_wt ]
-    # RNF43_TRUNC_BRAF_WT_samples = [i for i in RNF43_TRUNC_BRAF_WT_samples if i in high_scores]
+    RNF43_TRUNC_BRAF_WT_samples = [i for i in RNF43_TRUNC_BRAF_WT.index.tolist()
+                            if i in right_samples and braf_wt ]
+    # RNF43_TRUNC_BRAF_WT_samples = [i for i in RNF43_TRUNC_BRAF_WT_samples
+                            if i in high_scores]
     print(len(RNF43_TRUNC_BRAF_WT_samples))
-    RNF43_TRUNC_BRAF_MISS_samples = [i for i in RNF43_TRUNC_BRAF_MISS.index.tolist() if i in right_samples and braf_v600e ]
-    # RNF43_TRUNC_BRAF_MISS_samples = [i for i in RNF43_TRUNC_BRAF_MISS_samples if i in high_scores]
+    RNF43_TRUNC_BRAF_MISS_samples = [i for i in RNF43_TRUNC_BRAF_MISS.index.tolist()
+                            if i in right_samples and braf_v600e ]
+    # RNF43_TRUNC_BRAF_MISS_samples = [i for i in RNF43_TRUNC_BRAF_MISS_samples
+                            if i in high_scores]
     print(len(RNF43_TRUNC_BRAF_MISS_samples))
 
 
@@ -416,14 +468,17 @@ def main():
     print(high_scores)
 
 
-    RNF43_TRUNC_BRAF_WT_samples_high = [i for i in RNF43_TRUNC_BRAF_WT_samples if i in high_scores]
-    RNF43_TRUNC_BRAF_WT_samples_low = [i for i in RNF43_TRUNC_BRAF_WT_samples if i not in high_scores]
+    RNF43_TRUNC_BRAF_WT_samples_high = [i for i in RNF43_TRUNC_BRAF_WT_samples
+                                        if i in high_scores]
+    RNF43_TRUNC_BRAF_WT_samples_low = [i for i in RNF43_TRUNC_BRAF_WT_samples
+                                            if i not in high_scores]
 
 
     # print(len(RNF43_TRUNC_BRAF_WT_samples_high),len(RNF43_TRUNC_BRAF_WT_samples_low))
 
 
-    KM(KM_df,RNF43_TRUNC_BRAF_WT_samples_low, "RNF43_TRUNC_BRAF_WT_samples_low", RNF43_TRUNC_BRAF_WT_samples_high, "RNF43_TRUNC_BRAF_WT_samples_high")
+    KM(KM_df,RNF43_TRUNC_BRAF_WT_samples_low, "RNF43_TRUNC_BRAF_WT_samples_low",
+        RNF43_TRUNC_BRAF_WT_samples_high, "RNF43_TRUNC_BRAF_WT_samples_high")
 
     """
 
@@ -444,7 +499,8 @@ def KM(KM_df, list1,label1, list2, label2):
     ix = (groups == label1)
     T = df["Overall Survival (Months)"]
     E = df["Overall Survival Status"]
-    results = logrank_test(T[~ix], T[ix], event_observed_A=E[~ix], event_observed_B=E[ix])
+    results = logrank_test(T[~ix], T[ix], event_observed_A=E[~ix],
+                event_observed_B=E[ix])
 
     p = results.p_value
     print(p)
@@ -454,7 +510,8 @@ def KM(KM_df, list1,label1, list2, label2):
     ax = plt.subplot(111)
 
     for name, grouped_df in df.groupby('label'):
-        kmf.fit(grouped_df["Overall Survival (Months)"], grouped_df["Overall Survival Status"], label=name)
+        kmf.fit(grouped_df["Overall Survival (Months)"],
+        grouped_df["Overall Survival Status"], label=name)
         kmf.plot_survival_function(ax=ax,ci_show=False)
 
     ax.set_ylabel('Percent Survival')
