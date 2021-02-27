@@ -1,4 +1,4 @@
-# Various analysis done for eVIP2-paper
+# Various analysis done for the eVIP2 paper
 
 The eVIP2 method was described on bioRxiv:
 
