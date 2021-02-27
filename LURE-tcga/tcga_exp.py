@@ -35,7 +35,6 @@ def main():
                                             left_index=True, right_index=True)
     score_mut = score_mut[score_mut['x'].notna()]
 
-
     #z-score expression data
     tcga_exp_coadread_zscore = stats.zscore(tcga_exp_coadread, axis=1)
     tcga_exp_coadread = pd.DataFrame(tcga_exp_coadread_zscore,
@@ -47,17 +46,22 @@ def main():
     #########################
 
     global mapkgenes,wnt,hypoxia_genes,emt_genes,nfkb_genes,mmr
-    hypoxia_genes = ["HIF1A"]
-    emt_genes = ["TWIST1","SNAI1"]
-    nfkb_genes = ["NFKB1","NFKB2","RELB"]
+    hypoxia_genes = ["HIF1A"] #hypoxia assay
+    emt_genes = ["VIM","TWIST1","SNAI1"] #VIM = vimentin from WB + colon EMT marker genes
+    nfkb_genes = ["NFKB1","NFKB2","REL","RELA","RELB"]  # assay - NFKB subunits
+
     #https://www.nature.com/articles/s41698-018-0051-4 "MAPK Pathway Activity Score
     mapkgenes = "PHLDA1, SPRY2, SPRY4, ETV4, ETV5, DUSP4, DUSP6, CCND1,\
                             EPHA2, EPHA4".replace(',','').split()
-    wnt = ["AXIN2", "NKD1", "RNF43", "ZNRF3","WIF1"]
+    wnt = ["RNF43"]
     mmr = ["MLH1"]
 
-    clustermap(score_mut,tcga_exp_coadread,mapkgenes+wnt+mmr+hypoxia_genes+
+    clustermap(score_mut,tcga_exp_coadread,mapkgenes+wnt+hypoxia_genes+
                                                 nfkb_genes+emt_genes,"full" )
+
+    """
+    clustermap(score_mut,tcga_exp_coadread,mapkgenes+["RNF43","MLH1"],"full_mapk_rnf43" )
+
 
     ############################################
     #plot only WT BRAF and RNF43 TRUNC samples
@@ -79,7 +83,7 @@ def main():
     clustermap(score_mut_BRAFWT_RNF43_659,tcga_exp_coadread,mapkgenes+wnt+mmr+
                     hypoxia_genes+nfkb_genes+emt_genes,"_BRAFWT_RNF43_G659fs" )
 
-
+    """
 def clustermap(score_mut,tcga_exp, gene_list,  label ):
     tcga_exp = tcga_exp[tcga_exp.index.isin(gene_list)]
 
@@ -152,6 +156,9 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     #convert RNF43 mut status to color
     kras_status_c = []
     g12 = ["G12D","G12S", "G12R", "G12C", "G12V", "G12A"]
+    # g12 = [ "G12V"]
+
+
     for i in KRAS_muts:
         res = any(ele in str(i) for ele in g12)
         if res ==  True:
@@ -240,6 +247,11 @@ def clustermap(score_mut,tcga_exp, gene_list,  label ):
     ################
     # clustermap
     ################
+
+    # for method  in ["single","complete","average","weighted","centroid","median","ward"]:
+
+
+
     sns.clustermap(tcga_exp,center=0,cmap="bwr",xticklabels=False,
                 yticklabels=True,row_colors=gene_colors, method = "ward",
                 colors_ratio = .03, figsize = (12,8),

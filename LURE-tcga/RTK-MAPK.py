@@ -34,8 +34,12 @@ RNF43_G659fs_samples_contains = score_mut[score_mut["RNF43"].str.contains(
 RNF43_G659fs_samples_only = score_mut[score_mut["RNF43"] == "['G659fs']"]["RNF43"].index.tolist()
 
 #adding driver status of all mapk/rtk genes
-mapk_driver_status = pd.read_csv("inputs/cbioportal-MAPK-RTK-genes-driver-sample-matrix.txt",
+# mapk_driver_status = pd.read_csv("inputs/cbioportal-MAPK-RTK-genes-driver-sample-matrix.txt",
+#                 sep="\t", index_col = 0)
+
+mapk_driver_status = pd.read_csv("inputs/cbioportal-MAPK-RTK-genes-driver-sample-matrix-ALK-PTPRK-POLD1.txt",
                 sep="\t", index_col = 0)
+
 mapk_driver_status.index =  [i.split(":")[1][:-3] for i in mapk_driver_status.index]
 
 #samples in all three df
@@ -45,6 +49,8 @@ mapk_driver_status = mapk_driver_status[mapk_driver_status.index.isin(score_mut.
 score_mut = score_mut.merge(mapk_driver_status, how='outer', left_index=True, right_index=True)
 score_mut = score_mut.drop(columns=["Altered","x"])
 
+print(score_mut[ (score_mut["RNF43_TRUNCATING"] != "TRUNCATING")
+            & (score_mut["BRAF_MISSENSE"] != "MISSENSE") ])
 
 ##########################################
 # Group by RNF43 and BRAF status
@@ -62,7 +68,8 @@ print(RNF43_WT_BRAF_WT.loc[:,RNF43_WT_BRAF_WT.sum() !=0].sum().sort_values(
 RNF43_WT_BRAF_WT_avg = (RNF43_WT_BRAF_WT.sum().sort_values(
                             ascending=False)/RNF43_WT_BRAF_WT.shape[0]
                             ).to_frame().rename(columns = {0:"RNF43_WT_BRAF_WT"})
-
+RNF43_WT_BRAF_WT_count = (RNF43_WT_BRAF_WT.sum().sort_values(
+                            ascending=False)).to_frame().rename(columns = {0:"RNF43_WT_BRAF_WT"})
 
 #RNF43 WT & BRAF Missense
 RNF43_WT_BRAF_MISS = score_mut[ (score_mut["RNF43_TRUNCATING"] != "TRUNCATING")
@@ -76,6 +83,10 @@ print(RNF43_WT_BRAF_MISS.loc[:,RNF43_WT_BRAF_MISS.sum() !=0].sum().sort_values(
 RNF43_WT_BRAF_MISS_avg = (RNF43_WT_BRAF_MISS.sum().sort_values(
                         ascending=False)/RNF43_WT_BRAF_MISS.shape[0]
                         ).to_frame().rename(columns = {0:"RNF43_WT_BRAF_MISS"})
+RNF43_WT_BRAF_MISS_count = (RNF43_WT_BRAF_MISS.sum().sort_values(
+                        ascending=False)).to_frame().rename(
+                        columns = {0:"RNF43_WT_BRAF_MISS"})
+
 
 # RNF43 TRUNC & BRAF WT
 RNF43_TRUNC_BRAF_WT = score_mut[ (score_mut["RNF43_TRUNCATING"]== "TRUNCATING")
@@ -89,7 +100,8 @@ print(RNF43_TRUNC_BRAF_WT.loc[:,RNF43_TRUNC_BRAF_WT.sum() !=0].sum().sort_values
 RNF43_TRUNC_BRAF_WT_avg = (RNF43_TRUNC_BRAF_WT.sum().sort_values(
                         ascending=False)/RNF43_TRUNC_BRAF_WT.shape[0]
                         ).to_frame().rename(columns = {0:"RNF43_TRUNC_BRAF_WT"})
-
+RNF43_TRUNC_BRAF_WT_count = (RNF43_TRUNC_BRAF_WT.sum().sort_values(
+                        ascending=False)).to_frame().rename(columns = {0:"RNF43_TRUNC_BRAF_WT"})
 
 # RNF43 TRUNC & BRAF MISSENSE
 RNF43_TRUNC_BRAF_MISS = score_mut[(score_mut["RNF43_TRUNCATING"]== "TRUNCATING")
@@ -103,7 +115,8 @@ print(RNF43_TRUNC_BRAF_MISS.loc[:,RNF43_TRUNC_BRAF_MISS.sum() !=0].sum().sort_va
 RNF43_TRUNC_BRAF_MISS_avg = (RNF43_TRUNC_BRAF_MISS.sum().sort_values(
                             ascending=False)/RNF43_TRUNC_BRAF_MISS.shape[0]
                             ).to_frame().rename(columns = {0:"RNF43_TRUNC_BRAF_MISS"})
-
+RNF43_TRUNC_BRAF_MISS_count = (RNF43_TRUNC_BRAF_MISS.sum().sort_values(
+                            ascending=False)).to_frame().rename(columns = {0:"RNF43_TRUNC_BRAF_MISS"})
 
 ##########################################
 # MAPK gene driver event barplot
@@ -122,6 +135,22 @@ plt.savefig("outputs/MAPK_gene_events.png",bbox_inches = "tight",dpi=400)
 plt.clf()
 plt.close()
 
+
+#counts
+#combine 4 groups into one df and make bar plot
+merged_RNF43_BRAF_count = pd.concat([RNF43_WT_BRAF_WT_count,RNF43_WT_BRAF_MISS_count,
+                    RNF43_TRUNC_BRAF_WT_count,RNF43_TRUNC_BRAF_MISS_count], axis=1)
+#remove genes that have 0 counts in all conditions
+merged_RNF43_BRAF_count = merged_RNF43_BRAF_count[(merged_RNF43_BRAF_count.T != 0).any()]
+merged_RNF43_BRAF_count.plot.bar(rot=0 )
+
+plt.ylabel("Count of samples containing a driver event in the gene")
+plt.xticks(rotation=90)
+plt.savefig("outputs/MAPK_gene_events_count.png",bbox_inches = "tight",dpi=400)
+plt.clf()
+plt.close()
+
+sys.exit()
 
 """
 ##########################################
